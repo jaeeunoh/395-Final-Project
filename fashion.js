@@ -11,11 +11,10 @@ var edges = [];
 
 //Creating Timeline 
 var options = {
-	start_at_end: true,
-	timevav_position: "bottom",
+	//timevav_position: "bottom",
 	dragging: true,
 	start_at_slide: 0,
-	timenav_height: 300
+	timenav_height: 300,
 };
 
 
@@ -88,12 +87,18 @@ d3.queue()
 		var radius_color = d3.scaleLinear()
 			.domain([0, max_num])
 			.range(["pink", "#2b90f5"]);
+
+		for (var node of nodes) {
+			node.radius = radius_scale(node.number_searches);
+		}
 		var simulation = d3.forceSimulation()
+			.nodes(nodes)
 			.force("link", d3.forceLink().id(function(d) {
 				return d.id;
 			}))
 			.force("charge", d3.forceManyBody().strength(-20))
-			.force("center", d3.forceCenter(svg_w1 / 2, svg_h1 / 2));
+			.force("center", d3.forceCenter(svg_w1 / 2, svg_h1 / 2))
+			.force('collide', d3.forceCollide(node => node.radius));
 
 		var node = svg1.append("g")
 			.selectAll("circle")
@@ -107,6 +112,23 @@ d3.queue()
 				.on("start", dragstarted)
 				.on("drag", dragged)
 				.on("end", dragended));
+		node.append("text")
+			.attr("x", function(d) {
+				return d.x;
+			})
+			.attr("y", function(d) {
+				return d.y;
+			})
+			.attr("text-anchor", "middle")
+			.text(function(d) {
+				return d.id;
+			})
+			.style({
+				"fill": "black",
+				"font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
+				"font-size": "12px"
+			});
+		console.log('blah3');
 		var svg_edges = svg1.append('g')
 			.attr("class", "links")
 			.selectAll("line")
@@ -167,7 +189,7 @@ d3.queue()
 
 
 var slide_count = 2, // how many slides you have
-	delay = 100000000; //delay between slides
+	delay = 10; //delay between slides
 
 var url = window.location.href;
 var hash = parseInt(url.substring(url.indexOf("#") + 1));
@@ -175,16 +197,17 @@ if (isNaN(hash)) window.location.href = "#0";
 
 function autoplay() {
 	var url = window.location.href;
+	console.log(url + "url");
 	var hash = parseInt(url.substring(url.indexOf("#") + 1));
+	console.log(hash + "hash");
 	if (isNaN(hash) || hash === slide_count) window.location.href = "#0";
 	else {
 		$('.nav-next').trigger('click');
 	}
 }
 
-setInterval(function() {
-	autoplay()
-}, delay);
+
+//setInterval(function() {autoplay()}, delay);
 
 // var simulation = d3.forceSimulation()
 // 	.nodes(nodes)
@@ -222,21 +245,3 @@ function dragged(d) {
 }
 
 
-// 	node.append("text")
-// 		.attr("x", function(d) {
-// 			return d.x;
-// 		})
-// 		.attr("y", function(d) {
-// 			return d.y;
-// 		})
-// 		.attr("text-anchor", "middle")
-// 		.text(function(d) {
-// 			return d.id;
-// 		})
-// 		.style({
-// 			"fill": "black",
-// 			"font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
-// 			"font-size": "12px"
-// 		});
-// 	console.log('blah3');
-// }
