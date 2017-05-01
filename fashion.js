@@ -61,24 +61,30 @@ d3.queue()
 
 		// Create nodes of categories
 		for (var event of test_file) {
-			nodes.push({
-				id: event.Category,
-				number_searches: event.Num_searches_category
-			});
-			nodes.push({
-				id: event.Event,
-				number_searches: event.Num_searches_event
-			});
+			if (!nodes.find(node => node.id == event.Category)) {
+				nodes.push({
+					id: event.Category,
+					number_searches: event.Num_searches_category
+				});
+			}
+			if (!nodes.find(node => node.id == event.Event)) {
+				nodes.push({
+					id: event.Event,
+					number_searches: event.Num_searches_event
+				});
+			}
 			edges.push({
 				source: event.Category,
 				target: event.Event
 			});
-			if (event.Num_searches_category < max_num) {
-				max_num = event.Num_searches_category;
+			if (parseInt(event.Num_searches_category) > max_num || parseInt(event.Num_searches_event) > max_num) {
+				console.log('heerrr');
+				max_num = Math.max(parseInt(event.Num_searches_category), parseInt(event.Num_searches_event));
 			}
 		}
-		console.log(max_num);
+		console.log(nodes);
 		console.log(edges);
+		console.log(max_num + "max");
 
 		var radius_scale = d3.scaleLinear()
 			.domain([0, max_num])
@@ -90,6 +96,7 @@ d3.queue()
 
 		for (var node of nodes) {
 			node.radius = radius_scale(node.number_searches);
+			console.log(node.radius + "raddd");
 		}
 		var simulation = d3.forceSimulation()
 			.nodes(nodes)
@@ -105,8 +112,10 @@ d3.queue()
 			.data(nodes)
 			.enter()
 			.append("circle")
-			.style("fill", d => radius_color(d.Num_searches_category))
-			.attr("r", d => radius_scale(d.Num_searches_category))
+			.style("fill", d => radius_color(d.number_searches))
+			.attr("r", function(d) {
+				return d.number_searches;
+			})
 			.attr("stroke", "black")
 			.call(d3.drag()
 				.on("start", dragstarted)
@@ -242,5 +251,3 @@ function dragged(d) {
 	d.fx = d3.event.x;
 	d.fy = d3.event.y;
 }
-
-
