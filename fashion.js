@@ -1,6 +1,6 @@
 //Creating svg element
 
-var svg_w1 = window.innerWidth / 2;
+var svg_w1 = window.innerWidth;
 var svg_h1 = window.innerHeight / 2;
 var svg1 = d3.select("body").append("svg")
 	.attr("width", svg_w1)
@@ -135,10 +135,9 @@ d3.queue()
 			.data(edges)
 			.enter()
 			.append("line")
-			.style("stroke", "#000000")
-			.style("stroke-width", 1)
-			.style("stroke-opacity", 0.05);
-
+			.attr("stroke", "black")
+			.attr("stroke-width", 1)
+			.attr("stroke-opacity", 1);
 
 		// Update lines and circles with each tick
 		function ticked() {
