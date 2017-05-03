@@ -1,24 +1,17 @@
 //Creating svg element
-
 var svg_w1 = window.innerWidth;
 var svg_h1 = window.innerHeight;
 var svg1 = d3.select("body").append("svg")
 .attr("width", svg_w1)
 .attr("height", svg_h1);
+
+
 var margin = 10;
 var nodes = [];
 var edges = [];
 var toggle = 0;
 var max_num = 0;
 var months = []; 
-
-//Creating Timeline 
-var options = {
-	//timevav_position: "bottom",
-	dragging: true,
-	start_at_slide: 0,
-	timenav_height: 300,
-};
 
 
 d3.queue()
@@ -202,9 +195,8 @@ d3.queue()
 			svg1.data(nodes)
 			.enter()
 			.append("circle")
-			.style("fill", d => radius_color(d.number_searches))
 			.attr("r", d => check(d.month, nRadius, d.number_searches))
-			.attr("stroke", "black")
+			.attr("stroke", "pink")
 			.call(d3.drag()
 				.on("start", dragstarted)
 				.on("drag", dragged)
