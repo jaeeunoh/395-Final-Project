@@ -8,6 +8,7 @@ var svg1 = d3.select("body").append("svg")
 var margin = 10;
 var nodes = [];
 var edges = [];
+var toggle = 0;
 
 //Creating Timeline 
 var options = {
@@ -54,7 +55,7 @@ d3.queue()
 				}
 			});
 
-			var timeline = new TL.Timeline('timeline-embed', data, options);
+			//var timeline = new TL.Timeline('timeline-embed', data, options);
 
 			var max_num = 0;
 		}
@@ -105,7 +106,7 @@ d3.queue()
 			}))
 			.force("charge", d3.forceManyBody().strength(-20))
 			.force("center", d3.forceCenter(svg_w1 / 2, svg_h1 / 2))
-			.force('collide', d3.forceCollide(node => node.radius));
+			.force('collide', d3.forceCollide(node => node.radius / 2));
 
 		var node = svg1.append("g")
 			.selectAll("circle")
@@ -120,23 +121,11 @@ d3.queue()
 			.call(d3.drag()
 				.on("start", dragstarted)
 				.on("drag", dragged)
-				.on("end", dragended));
-		node.append("text")
-			.attr("x", function(d) {
-				return d.x;
-			})
-			.attr("y", function(d) {
-				return d.y;
-			})
-			.attr("text-anchor", "middle")
-			.text(function(d) {
-				return d.id;
-			})
-			.style({
-				"fill": "black",
-				"font-family": "Helvetica Neue, Helvetica, Arial, san-serif",
-				"font-size": "12px"
-			});
+				.on("end", dragended))
+			.on('dblclick', connectedNodes);
+
+
+
 		console.log('blah3');
 		var svg_edges = svg1.append('g')
 			.attr("class", "links")
@@ -172,6 +161,7 @@ d3.queue()
 					return d.y;
 				});
 		};
+
 		simulation.nodes(nodes)
 			.on("tick", ticked);
 
@@ -192,6 +182,85 @@ d3.queue()
 			d.fx = null;
 			d.fy = null;
 		}
+
+		function connectedNodes() {
+			if (toggle == 0) {
+				//Reduce the opacity of all but the neighbouring nodes
+				d = d3.select(this).node().__data__;
+				node.style("opacity", function(o) {
+					return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
+				});
+				svg_edges.style("opacity", function(o) {
+					return d.index == o.source.index | d.index == o.target.index ? 1 : 0.1;
+				});
+				//Reduce the op
+				toggle = 1;
+			} else {
+				//Put them back to opacity=1
+				node.style("opacity", 1);
+				svg_edges.style("opacity", 1);
+				toggle = 0;
+			}
+		}
+		var linkedByIndex = {};
+		for (i = 0; i < nodes.length; i++) {
+			linkedByIndex[i + "," + i] = 1;
+		};
+		edges.forEach(function(d) {
+			linkedByIndex[d.source.index + "," + d.target.index] = 1;
+		});
+		//This function looks up whether a pair are neighbours
+		function neighboring(a, b) {
+			return linkedByIndex[a.index + "," + b.index];
+		}
+
+
+		var width = 600;
+		var height = 300;
+
+		var holder = d3.select("body")
+			.append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+		// draw the circle
+		holder.append("circle")
+			.attr("cx", 300)
+			.attr("cy", 150)
+			.style("fill", "none")
+			.style("stroke", "blue")
+			.attr("r", 120);
+
+		// when the input range changes update the circle 
+		d3.select("#nRadius").on("input", function() {
+			update(+this.value);
+		});
+
+		// Initial starting radius of the circle 
+		update(120);
+
+		// update the elements
+		function update(nRadius) {
+
+			// adjust the text on the range slider
+			d3.select("#nRadius-value").text(nRadius);
+			d3.select("#nRadius").property("value", nRadius);
+
+			// update the rircle radius
+			holder.selectAll("circle")
+				.attr("r", nRadius);
+			node
+				.append("circle")
+				.attr("r", function(d) {
+					console.log("yes");
+					return nRadius; })
+				.attr("fille", radius_scale(nRadius));
+			node.append("title")
+				.text(function(d) {
+					return d.id;
+				});
+		}
+
 	});
 
 
@@ -214,24 +283,6 @@ function autoplay() {
 	}
 }
 
-
-//setInterval(function() {autoplay()}, delay);
-
-// var simulation = d3.forceSimulation()
-// 	.nodes(nodes)
-// 	.force("charge", d3.forceManyBody())
-// 	.force("center", d3.forceCenter(svg_w1 / 2, svg_h1 / 2));
-
-
-// simulation.nodes(nodes).on("tick", ticked);
-
-// function ticked() {
-//  node
-//     .attr("cx", function(d) {
-//        return d.x;})
-//     .attr("cy", function(d) {
-//       return d.y;});
-// };
 // Dragging helper functions that use simulation 
 function dragstarted(d) {
 	if (!d3.event.active) simulation.alphaTarget(0.3).restart();
