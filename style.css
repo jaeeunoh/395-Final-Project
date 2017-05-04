@@ -1,3 +1,8 @@
+.navbar {
+  background-color: teal;
+}
+
+
 .title {
   color:white;
 }
@@ -5,13 +10,18 @@
   border-style:ridge;
   border-color: lightgray;
 }
-.event {
+.col-sm-4 {
   border-style: ridge;
   border-color: lightgray;
 }
 
 .ticks {
   font: 10px sans-serif;
+}
+
+.event_name {
+  font-size: 35px;
+  text-align: center;
 }
 
 .track,
