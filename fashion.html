@@ -30,6 +30,7 @@
                 <p> Date</p>
             </div>
             <div class="col-md-12">
+            <button type="button" id="start" class="btn" >Play</button>
                 <p>
                     <label for="nRadius"
                     style="display: inline-block; width: 240px; text-align: right">
@@ -37,28 +38,30 @@
                 </label>
                 <input type="range" min="0" max="48" id="nRadius">
                 <script type="text/javascript">
+               
 
                     var width = window.innerWidth,
                     height = 70,
                     padding = 100;
-                    margin = 50; 
+                    margin = 60; 
 
                     var svg = d3.select('body').append('svg')
                     .attr('width', width)
                     .attr('height', height);
 
-                    var mindate = new Date(2002, 0, 1), 
-                    maxdate = new Date(2012, 0, 31); 
+                    var mindate = new Date(2012, 0, 1), 
+                    maxdate = new Date(2014, 0, 31); 
 
                     var scale = d3.scaleTime()
                     .domain([mindate, maxdate])
                     .range([margin*2, width - margin*2]); 
 
-                    var axis = d3.axisBottom(scale); 
+                    var axis = d3.axisBottom(scale).ticks(d3.timeMonth); 
 
                     svg.append('g')
                     .attr('transform', 'translate(' + 0 + ', ' + 0 + ')')
                     .call(axis);
+
 
                 </script>
                 <br>
