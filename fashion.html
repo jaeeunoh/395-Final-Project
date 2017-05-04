@@ -8,8 +8,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
         <script src="http://d3js.org/topojson.v1.min.js"></script>
-        <script src="d3.slider.js"></script>
-        <link rel="stylesheet" href="d3.slider.css">
+        <script type="text/javascript" src="vis/dist/vis.js"></script>
+        <link href="vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
         <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
         <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
         
@@ -22,9 +22,10 @@
                 style="display: inline-block; width: 240px; text-align: right">
                 radius = <span id="nRadius-value">…</span>
             </label>
-            <input type="range" min="1" max="100" id="nRadius">
+            <input type="range" min="0" max="48" id="nRadius">
         </p>
         <div id="slider3"></div>
-        <script type="text/javascript" src="fashion.js"></script>
+        <div id = "mynetwork"> </div>
+        <script type="text/javascript" src="fashion3.js"></script>
     </body>
 </html>
