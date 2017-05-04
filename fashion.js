@@ -1,9 +1,11 @@
 	//Creating svg element
-	var svg_w1 = window.innerWidth;
-	var svg_h1 = window.innerHeight;
-	var svg1 = d3.select("body").append("svg")
+	var svg_w1 = 750;
+	var svg_h1 = 500;
+	var svg1 = d3.select("div.network").append("svg")
 	.attr("width", svg_w1)
 	.attr("height", svg_h1);
+
+
 
 
 	var margin = 10;
@@ -222,7 +224,8 @@
 					// simulation.nodes(nodes)
 					// .on("tick", ticked);
 					
-					node.exit().remove();
+					//node.exit().remove();
+
 
 				// Force is calcualted 
 				// simulation.force("link")
