@@ -1,7 +1,7 @@
 	//Creating svg element
-	var svg_w1 = window.innerWidth;
-	var svg_h1 = window.innerHeight;
-	var svg1 = d3.select("body").append("svg")
+	var svg_w1 = 750;
+	var svg_h1 = 300;
+	var svg1 = d3.select("div.network").append("svg")
 		.attr("width", svg_w1)
 		.attr("height", svg_h1);
 
@@ -54,10 +54,6 @@
 					})
 				}
 			}
-			console.log(max_num + "Max");
-			console.log(edges);
-			console.log(nodes);
-
 			var radius_scale = d3.scaleLinear()
 				.domain([0, max_num])
 				.range([50, 150]);
@@ -98,14 +94,14 @@
 
 
 
-			// var svg_edges = svg1.append("g").selectAll("line")
-			// .attr("class", "links")
-			// .data(edges)
-			// .enter()
-			// .append("line")
-			// .attr("stroke", "black")
-			// .attr("stroke-width", 1)
-			// .attr("stroke-opacity", 1);
+			var svg_edges = svg1.append("g").selectAll("line")
+			.attr("class", "links")
+			.data(edges)
+			.enter()
+			.append("line")
+			.attr("stroke", "black")
+			.attr("stroke-width", 1)
+			.attr("stroke-opacity", 1);
 
 			// function update_date(time) {
 			// 	var update_node = [];
@@ -119,36 +115,36 @@
 
 
 			// Update lines and circles with each tick
-			// function ticked() {
-			// 	svg_edges.
-			// 	attr("x1", function(d) {
-			// 		return d.source.x;
-			// 	})
-			// 	.attr("y1", function(d) {
-			// 		return d.source.y;
-			// 	})
-			// 	.attr("x2", function(d) {
-			// 		return d.target.x;
-			// 	})
-			// 	.attr("y2", function(d) {
-			// 		return d.target.y;
-			// 	});
+			function ticked() {
+				svg1.selectAll("line.links").
+				attr("x1", function(d) {
+						return d.source.x;
+					})
+					.attr("y1", function(d) {
+						return d.source.y;
+					})
+					.attr("x2", function(d) {
+						return d.target.x;
+					})
+					.attr("y2", function(d) {
+						return d.target.y;
+					});
 
-			// 	node
-			// 	.attr("cx", function(d) {
-			// 		return d.x;
-			// 	})
-			// 	.attr("cy", function(d) {
-			// 		return d.y;
-			// 	});
-			// };
+				node
+					.attr("cx", function(d) {
+						return d.x;
+					})
+					.attr("cy", function(d) {
+						return d.y;
+					});
+			};
 
-			// simulation.nodes(nodes)
-			// .on("tick", ticked);
+			simulation.nodes(nodes)
+				.on("tick", ticked);
 
-			// // Force is calcualted 
-			// simulation.force("link")
-			// .links(edges);
+			// Force is calcualted 
+			simulation.force("link")
+				.links(edges);
 
 			// Dragging helper functions that use simulation 
 			function dragstarted(d) {
@@ -183,7 +179,6 @@
 			// Initial starting radius of the circle 
 			update(node, 0);
 
-
 			// update the elements
 			function update(node, nRadius) {
 
@@ -202,22 +197,23 @@
 				// });
 				// node.exit().remove();
 
-				// 	node.attr('r', function(d) {
-				// 		if (parseDate(d.Month) == nRadius) {
-				// 			return radius_scale(d.number_searches);
-				// } else {
-				// 	return 0;
-				// }
+				node.attr('r', function(d) {
+					console.log(d);
+					if (parseDate(d.month) == nRadius) {
+						return radius_scale(d.number_searches);
+					} else {
+						return 0;
+					}
+				});
 
+				simulation.nodes(nodes)
+				.on("tick", ticked);
 
-				// simulation.nodes(nodes)
-				// .on("tick", ticked);
+				node.exit().remove();
 
-				// node.exit().remove();
-
-				// Force is calcualted 
-				// simulation.force("link")
-				// .links(edges);
+				//Force is calcualted 
+				simulation.force("link")
+				.links(edges);
 
 				//node = node.enter().append("circle").attr("fill", function(d) { return radius_color(d.number_searches); }).attr("r", radius_scale(nRadius));
 			}
@@ -238,11 +234,12 @@
 
 		});
 
-	// function parseDate (date) {
-	// 	var parser = d3.timeParse("%b-%y");
-	// 	var date = parser(date);
-	// 	return (date.getYear() - 2012) * 12 +  date.getMonth();
-	// }
+
+	function parseDate(date) {
+		var parser = d3.timeParse("%b-%y");
+		var date = parser(date);
+		return (date.getYear() - 2012) * 12 + date.getMonth();
+	}
 
 	// $('.btn').click(function() {
 	// 	console.log('test');
