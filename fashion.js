@@ -289,7 +289,7 @@
 		height = 20,
 		padding = 10;
 	margin = 140;
-	var svg = d3.select('div.span9.tick').append('svg')
+	var svg = d3.select('div.col-md-12.tick').append('svg')
 		.attr('width', width)
 		.attr('height', height);
 	var mindate = new Date(2012, 0, 1),
