@@ -302,7 +302,7 @@
 		.attr('transform', 'translate(' + 0 + ', ' + 0 + ')')
 		.call(axis);
 	var year = ["2012", "2013", "2014", "2015"];
-	var svg2 = d3.select('div.span9.tick').append('svg')
+	var svg2 = d3.select('div.col-md-12.tick').append('svg')
 		.attr('width', width)
 		.attr('height', height);
 	svg2.selectAll('text')
