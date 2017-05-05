@@ -59,7 +59,6 @@
 input[type=range] {
   -webkit-appearance: none;
   width: 100%;
-  margin: 13.8px 0;
 }
 input[type=range]:focus {
   outline: none;
@@ -72,6 +71,7 @@ input[type=range]::-webkit-slider-runnable-track {
   background: #9EB9D4;
   border-radius: 1.3px;
   border: 0.2px solid #9EB9D4;
+  position:absolute;
 }
 input[type=range]::-webkit-slider-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
@@ -83,9 +83,11 @@ input[type=range]::-webkit-slider-thumb {
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -14px;
+  position:absolute;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
   background: #9EB9D4;
+  position:absolute;
 }
 input[type=range]::-moz-range-track {
   width: 100%;
@@ -95,6 +97,7 @@ input[type=range]::-moz-range-track {
   background: #3071a9;
   border-radius: 1.3px;
   border: 0.2px solid #a00101;
+  position:absolute;
 }
 input[type=range]::-moz-range-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #6495ED;
@@ -104,6 +107,7 @@ input[type=range]::-moz-range-thumb {
   border-radius: 3px;
   background: #6495ED;
   cursor: pointer;
+  position:absolute;
 }
 input[type=range]::-ms-track {
   width: 100%;
@@ -112,18 +116,21 @@ input[type=range]::-ms-track {
   background: transparent;
   border-color: transparent;
   color: transparent;
+  position:absolute;
 }
 input[type=range]::-ms-fill-lower {
   background: #9EB9D4;
   border: 0.2px solid #a00101;
   border-radius: 2.6px;
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  position:absolute;
 }
 input[type=range]::-ms-fill-upper {
   background: #9EB9D4;
   border: 0.2px solid #a00101;
   border-radius: 2.6px;
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  position:absolute;
 }
 input[type=range]::-ms-thumb {
   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
@@ -134,6 +141,7 @@ input[type=range]::-ms-thumb {
   background: #9EB9D4;
   cursor: pointer;
   height: 8.4px;
+  position:absolute;
 }
 input[type=range]:focus::-ms-fill-lower {
   background: #3071a9;

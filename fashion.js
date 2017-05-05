@@ -184,15 +184,6 @@
 			update(node, 0);
 
 
-
-			function check(a, b, c) {
-				if (a == b) {
-					console.log(a + "," + b + "," + c + "\n");
-					return radius_scale(c);
-				}
-
-			}
-
 			// update the elements
 			function update(node, nRadius) {
 
@@ -275,13 +266,59 @@
 			if (t == 0) {
 				t = +b.property("min");
 			}
-			if(parseInt($("#nRadius").val()) == 48) {
+			if (parseInt($("#nRadius").val()) == 48) {
 				clearInterval(myTimer); //stop the autoplay
 			}
 			d3.select("#nRadius-value").text(t);
-			d3.select("#nRadius").property("value", t)	;
+			d3.select("#nRadius").property("value", t);
 			console.log(t); //log value display at nRadius
 			b.property("value", t);
 			//updateView(t); /// For updating the view
 		}, 1000);
 	});
+
+	d3.select("#pause").on("click", function() {
+		clearInterval(myTimer);
+	});
+
+	d3.select("#stop").on("click", function() {
+		d3.select("#nRadius-value").text(0);
+		d3.select("#nRadius").property("value", 0);
+		clearInterval(myTimer);
+	});
+
+
+	var width = 1140,
+		height = 20,
+		padding = 10;
+	margin = 140;
+	var svg = d3.select('div.span9.tick').append('svg')
+		.attr('width', width)
+		.attr('height', height);
+	var mindate = new Date(2012, 0, 1),
+		maxdate = new Date(2016, 0, 31);
+	var scale = d3.scaleTime()
+		.domain([mindate, maxdate])
+		.range([10, width]);
+	var axis = d3.axisBottom(scale).ticks(48).tickFormat(d3.timeFormat("%m"));
+	svg.append('g')
+		.attr('transform', 'translate(' + 0 + ', ' + 0 + ')')
+		.call(axis);
+	var year = ["2012", "2013", "2014", "2015"];
+	var svg2 = d3.select('div.span9.tick').append('svg')
+		.attr('width', width)
+		.attr('height', height);
+	svg2.selectAll('text')
+		.data(year)
+		.enter()
+		.append('text')
+		.attr("dx", margin)
+		.attr("x", function(d, i) {
+			return 280 * i;
+		})
+		.attr("font-size", "10px")
+		.attr("fill", "black")
+		.attr("y", 20)
+		.text(function(d) {
+			return d;
+		});

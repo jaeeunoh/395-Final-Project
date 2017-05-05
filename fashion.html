@@ -26,67 +26,22 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-md-2">
-                    <p> Date</p>
-                </div>
                 <div class="col-md-12">
-                    <button type="button" id="start" class="btn" >Play</button>
-                    <p>
-                        <label for="nRadius"
-                            style="display: inline-block; width: 240px; text-align: right">
-                            radius = <span id="nRadius-value">…</span>
-                        </label>
-                        <input type="range" min="0" max="48" id="nRadius">
-<script type="text/javascript">
-               
-
-                    var width = window.innerWidth,
-                    height = 20,
-                    padding = 10;
-                    margin = 140; 
-
-                    var svg = d3.select('body').append('svg')
-                    .attr('width', width)
-                    .attr('height', height);
-
-                    var mindate = new Date(2012, 0, 1), 
-                    maxdate = new Date(2016, 0, 31); 
-
-                    var scale = d3.scaleTime()
-                    .domain([mindate, maxdate])
-                    .range([margin + 10, width - margin]); 
-
-                    var axis = d3.axisBottom(scale).ticks(48).tickFormat(d3.timeFormat("%m")); 
-
-                    svg.append('g')
-                    .attr('transform', 'translate(' + 0 + ', ' + 0 + ')')
-                    .call(axis);
-
-                    var year = ["2012", "2013", "2014", "2015"]; 
-
-
-                    var svg2 = d3.select('body').append('svg')
-                    .attr('width', width)
-                    .attr('height', height);
-
-                    svg2.selectAll('text')
-                    .data(year)
-                    .enter()
-                    .append('text')
-                    .attr("dx", margin)
-                    .attr("x", function (d, i) {
-                        return 280 * i; 
-                    })
-                    .attr("font-size", "10px")
-                    .attr("fill", "black")
-                    .attr("y", 20)
-                    .text(function(d) {return d;});
-                    
-
-
-                </script>
-                        <br>
-                    </p>
+                    <div class="span9">
+                        <button type="button" id="start" class="btn" >Play</button>
+                        <button type="button" id="pause" class="btn pause" >Pause</button>
+                        <button type="button" id="stop" class="btn stop" >Stop</button>
+                        <p>
+                            <label for="nRadius"
+                                style="display: inline-block; width: 500px; text-align: right">
+                                <span id="nRadius-value">…</span>
+                            </label>
+                            <input type="range" min="0" max="48" id="nRadius">
+                            <br>
+                        </p>
+                    </div>
+                    <div class="span9 tick">
+                    </div>
                 </div>
             </div>
         </div>

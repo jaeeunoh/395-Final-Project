@@ -124,6 +124,12 @@ d3.queue()
 								min:1,
 								max: 10
 							}
+						},
+						physics: {
+							stabilization: {
+								enabled: false
+								
+							}
 						}
 					};
 
@@ -142,5 +148,3 @@ function parseDate (dateString) {
 	var date = parser(dateString);
 	return (date.getFullYear() - 2012) * 12 +  date.getMonth();
 }
-
-			

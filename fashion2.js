@@ -1,6 +1,6 @@
-	//Creating svg element
-	var svg_w1 = window.innerWidth;
-	var svg_h1 = window.innerHeight;
+//Creating svg element
+	var svg_w1 = 600;
+	var svg_h1 = 800;
 	var svg1 = d3.select("body").append("svg")
 	.attr("width", svg_w1)
 	.attr("height", svg_h1);
@@ -13,6 +13,7 @@
 	var toggle = 0;
 	var max_num = 0;
 	var months = [];
+	var timeIndex = 3;
 
 	var simulation = d3.forceSimulation()
 	.force("link", d3.forceLink().id(function(d) { return d.id; }))
@@ -30,7 +31,7 @@
 					nodes.push({
 						id: event.Node,
 						label: event.Node,
-						value: event.Popularity,
+						value: parseInt(event.Popularity),
 						month: event.Month,
 						group: event.Type
 					});
@@ -41,32 +42,32 @@
 				}
 				
 				// edges
-				for (var edge of edge_list) {
-					edges.push({
-						from: edge.Category,
-						to: edge.Event,
-						month: edge.Month,
-						value: edge.Link
-					})
-					if (!nodes.find(node => node.id == edge.source)) {
-						nodes.push({
-							id: edge.Category,
-							label: edge.Category,
-							value: 50,
-							month: edge.Month,
-							group: "Clothing"
-						})
-					}
-					if (!nodes.find(node => node.id == edge.target)) {
-						nodes.push({
-							id: edge.Event,
-							label: edge.Event,
-							value: 50,
-							month: edge.Month,
-							type: 'Event'
-						})
-					}
-				}
+				// for (var edge of edge_list) {
+				// 	edges.push({
+				// 		source: edge.Category,
+				// 		target: edge.Event,
+				// 		month: edge.Month,
+				// 		value: parseInt(edge.Link)
+				// 	})
+				// 	if (!nodes.find(node => node.id == edge.Event)) {
+				// 		nodes.push({
+				// 			id: edge.Category,
+				// 			label: edge.Category,
+				// 			value: 50,
+				// 			month: edge.Month,
+				// 			group: "Clothing"
+				// 		})
+				// 	}
+				// 	if (!nodes.find(node => node.id == edge.Category)) {
+				// 		nodes.push({
+				// 			id: edge.Event,
+				// 			label: edge.Event,
+				// 			value: 50,
+				// 			month: edge.Month,
+				// 			type: 'Event'
+				// 		})
+				// 	}
+				// }
 				
 
 				// Create scales
@@ -79,75 +80,124 @@
 				.range(["pink", "#2b90f5"]);
 
 				for (var node of nodes) {
-					node.radius = radius_scale(node.number_searches);
-					node.color = radius_color(node.number_searches);
+					node.radius = radius_scale(node.value);
+					node.color = radius_color(node.value);
 				}
 
 
 
 				// Create node and edges
 				node = svg1.append("g")
-				.attr("class", "nodes")
-				.selectAll('circle')
-				.data(nodes);
+					.attr("class", "nodes")
+					.selectAll('circle')
+					.data(eval("nodes.filter(d => parseDate(d.month) == " + timeIndex +")"))
+					.enter()
+					.append("circle")
+					//.attr('class', 'node')
+					.attr('r', d => radius_scale(d.value));
 
-				link = svg1.append("g")
-				.attr("class", "links")
-				.selectAll('line')
-				.data(edges);
 
+				// link = svg1.append("g")
+				// 	.attr("class", "links")
+				// 	.selectAll('line')
+				// 	.data(eval("edges.filter(d => parseDate(d.month) == " + timeIndex +")"))
+				// 	.enter()
+				// 	.append('line');
+
+
+
+
+				function ticked() {
+					// link
+					// .attr("x1", function(d) { return d.source.x; })
+					// .attr("y1", function(d) { return d.source.y; })
+					// .attr("x2", function(d) { return d.target.x; })
+					// .attr("y2", function(d) { return d.target.y; });
+					node
+					.attr("cx", function(d) { return d.x; })
+					.attr("cy", function(d) { return d.y; });
+				}
+
+
+				simulation.nodes(eval("nodes.filter(d => parseDate(d.month) == " + timeIndex +")"))
+					.on("tick", ticked);
+				
+					
+
+				// simulation.force("link") .links(eval("edges.filter(d => parseDate(d.month) == " + timeIndex +")"));
+				console.log(nodes);
+				
 				d3.select("#nRadius").on("input", function() {
 					updateView(this.value);
 
 				});
+				
+				//updateView(0);
+				
 
-				// Initial starting radius of the circle 
-				updateView(0);
 
 
-
-				// update the elements
+				//update the elements
 				function updateView (nRadius) {
 					// filter data
 					curNodes = nodes.filter(d => parseDate(d.month) == nRadius);
 					curEdges = edges.filter(d => parseDate(d.month) == nRadius);
 					console.log(curNodes);
 					// adjust the text on the range slider
+
 					d3.select("#nRadius-value").text(nRadius);
 					d3.select("#nRadius").property("value", nRadius);
-					
+					timeIndex = nRadius;
 
 					
 					// Update nodes 
-					//node.exit().remove();
+					node = node.data(curNodes)
+					node.exit().remove();
+					
+
+					
 					node.enter()
 					.append('circle')
-					.merge(node)
-					.attr('r', d => (parseDate(d.month) == nRadius) * radius_scale(d.value))
+					.attr('class','node')
+					.attr('r', d => radius_scale(d.value))
+					.merge(node);
 
+					
 
   					// Update links
-  					//link.exit().remove()
-  					link.enter()
-  					.enter()
-  					.append('line')
-  					.merge(link)
-  					.attr('stroke-width', d => (parseDate(d.month) == nRadius) * 5);
+  					// var link = svg1.append("g").selectAll('line').data(curEdges);
+  					// link.exit().remove();
+  					// link.enter()
+  					// .append('line')
+  					// .attr('class','link')
+  					// .attr('stroke-width', d => 5);
   					
-  					simulation
-					.nodes(node)
-					.on("tick", ticked);
+  					
+  					simulation = d3.forceSimulation()
+						.force("link", d3.forceLink().id(function(d) { return d.id; }))
+						.force("charge", d3.forceManyBody())
+						.force("center", d3.forceCenter(svg_w1 / 2, svg_h1 / 2));
+  					
 
-					simulation.force("link")
-					.links(edge);
+  					simulation.nodes(curNodes)
+  						.restart()
+  						.on("tick", ticked);
+  					
+  						
+
+  					// simulation.force("link")
+  					// 	.links(curEdges);
+
+  					
+  						
 
 
   					function ticked() {
-  						link
-  						.attr("x1", function(d) { return d.source.x; })
-  						.attr("y1", function(d) { return d.source.y; })
-  						.attr("x2", function(d) { return d.target.x; })
-  						.attr("y2", function(d) { return d.target.y; });
+  						// link
+  						// .attr("x1", function(d) { return d.source.x; })
+  						// .attr("y1", function(d) { return d.source.y; })
+  						// .attr("x2", function(d) { return d.target.x; })
+  						// .attr("y2", function(d) { return d.target.y; });
 
   						node
   						.attr("cx", function(d) { return d.x; })
@@ -156,12 +206,13 @@
   					//node.exit().remove();
   					//link.exit().remove();
 
-  				};
-
-
-
-
+  				}
   			});
+
+
+
+
+  			//});
 
 	function parseDate (dateString) {
 		var parser = d3.timeParse("%b-%y");
