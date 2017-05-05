@@ -84,12 +84,10 @@
 					node.color = radius_color(node.value);
 				}
 
-
-
 				// Create node and edges
-				node = svg1.append("g")
+				nodeG = svg1.append("g")
 					.attr("class", "nodes")
-					.selectAll('circle')
+				node = nodeG.selectAll('circle')
 					.data(eval("nodes.filter(d => parseDate(d.month) == " + timeIndex +")"))
 					.enter()
 					.append("circle")
@@ -105,15 +103,13 @@
 				// 	.append('line');
 
 
-
-
 				function ticked() {
 					// link
 					// .attr("x1", function(d) { return d.source.x; })
 					// .attr("y1", function(d) { return d.source.y; })
 					// .attr("x2", function(d) { return d.target.x; })
 					// .attr("y2", function(d) { return d.target.y; });
-					node
+					nodeG.selectAll('circle')
 					.attr("cx", function(d) { return d.x; })
 					.attr("cy", function(d) { return d.y; });
 				}
@@ -123,13 +119,12 @@
 					.on("tick", ticked);
 				
 					
-
 				// simulation.force("link") .links(eval("edges.filter(d => parseDate(d.month) == " + timeIndex +")"));
-				console.log(nodes);
+				
 				
 				d3.select("#nRadius").on("input", function() {
+					console.log(this.value);
 					updateView(this.value);
-
 				});
 				
 				//updateView(0);
@@ -159,8 +154,8 @@
 					node.enter()
 					.append('circle')
 					.attr('class','node')
-					.attr('r', d => radius_scale(d.value))
-					.merge(node);
+					.attr('r', d => radius_scale(d.value));
+					
 
 					
 
@@ -173,16 +168,10 @@
   					// .attr('stroke-width', d => 5);
   					
   					
-  					simulation = d3.forceSimulation()
-						.force("link", d3.forceLink().id(function(d) { return d.id; }))
-						.force("charge", d3.forceManyBody())
-						.force("center", d3.forceCenter(svg_w1 / 2, svg_h1 / 2));
-  					
 
   					simulation.nodes(curNodes)
-  						.restart()
-  						.on("tick", ticked);
-  					
+  						.restart();
+  					simulation.on("tick", ticked);
   						
 
   					// simulation.force("link")
@@ -199,12 +188,12 @@
   						// .attr("x2", function(d) { return d.target.x; })
   						// .attr("y2", function(d) { return d.target.y; });
 
-  						node
+  						nodeG.selectAll('circle.node')
   						.attr("cx", function(d) { return d.x; })
   						.attr("cy", function(d) { return d.y; });
   					}
-  					//node.exit().remove();
-  					//link.exit().remove();
+  					
+  					
 
   				}
   			});
