@@ -124,6 +124,12 @@ d3.queue()
 								min:1,
 								max: 10
 							}
+						},
+						physics: {
+							stabilization: {
+								enabled: false
+								
+							}
 						}
 					};
 
