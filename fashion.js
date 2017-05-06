@@ -367,13 +367,12 @@ svg2.selectAll('text')
 .data(year)
 .enter()
 .append('text')
-.attr("dx", margin)
 .attr("x", function(d, i) {
 	return 280 * i;
 })
 .attr("font-size", "10px")
 .attr("fill", "black")
-.attr("y", 20)
+.attr("y", 10)
 .text(function(d) {
 	return d;
 });
