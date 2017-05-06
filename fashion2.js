@@ -13,7 +13,6 @@
 	var toggle = 0;
 	var max_num = 0;
 	var months = [];
-	var timeIndex = 3;
 
 	var simulation = d3.forceSimulation()
 	.force("link", d3.forceLink().id(function(d) { return d.id; }))
@@ -21,8 +20,8 @@
 	.force("center", d3.forceCenter(svg_w1 / 2, svg_h1 / 2));
 
 	d3.queue()
-	.defer(d3.csv, "node_list_test.csv")
-	.defer(d3.csv, "edge_list_test.csv")
+	.defer(d3.csv, "data-processing/node_list.csv")
+	.defer(d3.csv, "data-processing/edge_list.csv")
 	.await(function(error, node_list, edge_list) {
 
 				// Create nodes of categories
@@ -32,7 +31,7 @@
 						id: event.Node,
 						label: event.Node,
 						value: parseInt(event.Popularity),
-						month: event.Month,
+						month: parseDate(event.Month),
 						group: event.Type
 					});
 
@@ -41,35 +40,35 @@
 					}
 				}
 				
-				// edges
-				// for (var edge of edge_list) {
-				// 	edges.push({
-				// 		source: edge.Category,
-				// 		target: edge.Event,
-				// 		month: edge.Month,
-				// 		value: parseInt(edge.Link)
-				// 	})
-				// 	if (!nodes.find(node => node.id == edge.Event)) {
-				// 		nodes.push({
-				// 			id: edge.Category,
-				// 			label: edge.Category,
-				// 			value: 50,
-				// 			month: edge.Month,
-				// 			group: "Clothing"
-				// 		})
-				// 	}
-				// 	if (!nodes.find(node => node.id == edge.Category)) {
-				// 		nodes.push({
-				// 			id: edge.Event,
-				// 			label: edge.Event,
-				// 			value: 50,
-				// 			month: edge.Month,
-				// 			type: 'Event'
-				// 		})
-				// 	}
-				// }
+				//edges
+				for (var edge of edge_list) {
+					edges.push({
+						source: edge.Category,
+						target: edge.Event,
+						month: parseDate(edge.Month),
+						value: parseInt(edge.Link)
+					});
+					// if (!nodes.find(node => node.id == edge.Event)) {
+					// 	nodes.push({
+					// 		id: edge.Category,
+					// 		label: edge.Category,
+					// 		value: 50,
+					// 		month: edge.Month,
+					// 		group: "Clothing"
+					// 	})
+					// }
+					// if (!nodes.find(node => node.id == edge.Category)) {
+					// 	nodes.push({
+					// 		id: edge.Event,
+					// 		label: edge.Event,
+					// 		value: 50,
+					// 		month: edge.Month,
+					// 		type: 'Event'
+					// 	})
+				}
+				//}
 				
-
+				
 				// Create scales
 				var radius_scale = d3.scaleLinear()
 				.domain([0, max_num])
@@ -86,109 +85,104 @@
 
 				// Create node and edges
 				nodeG = svg1.append("g")
-					.attr("class", "nodes")
+				.attr("class", "nodes")
+
 				node = nodeG.selectAll('circle')
-					.data(eval("nodes.filter(d => parseDate(d.month) == " + timeIndex +")"))
-					.enter()
-					.append("circle")
+				.data(nodes)
+				.enter()
+				.append("circle")
+				.attr('class', 'node');
 					//.attr('class', 'node')
-					.attr('r', d => radius_scale(d.value));
-
-
-				// link = svg1.append("g")
-				// 	.attr("class", "links")
-				// 	.selectAll('line')
-				// 	.data(eval("edges.filter(d => parseDate(d.month) == " + timeIndex +")"))
-				// 	.enter()
-				// 	.append('line');
-
-
-				function ticked() {
-					// link
-					// .attr("x1", function(d) { return d.source.x; })
-					// .attr("y1", function(d) { return d.source.y; })
-					// .attr("x2", function(d) { return d.target.x; })
-					// .attr("y2", function(d) { return d.target.y; });
-					nodeG.selectAll('circle')
-					.attr("cx", function(d) { return d.x; })
-					.attr("cy", function(d) { return d.y; });
-				}
-
-
-				simulation.nodes(eval("nodes.filter(d => parseDate(d.month) == " + timeIndex +")"))
-					.on("tick", ticked);
-				
 					
-				// simulation.force("link") .links(eval("edges.filter(d => parseDate(d.month) == " + timeIndex +")"));
+				simulation = simulation.nodes(nodes).restart();
+
+
+				linkG = svg1.append("g")
+				.attr("class", "links")
+
+				link = linkG.selectAll('line')
+				.data(edges)
+				.enter()
+				.append('line')
+				.attr('class', 'link');
+
 				
-				
+				simulation.force("link")
+				.links(edges);
+
+
 				d3.select("#nRadius").on("input", function() {
 					console.log(this.value);
 					updateView(this.value);
 				});
-				
-				//updateView(0);
-				
+
+				updateView(0);
+
 
 
 
 				//update the elements
 				function updateView (nRadius) {
 					// filter data
-					curNodes = nodes.filter(d => parseDate(d.month) == nRadius);
-					curEdges = edges.filter(d => parseDate(d.month) == nRadius);
-					console.log(curNodes);
+					// curNodes = nodes.filter(d => parseDate(d.month) == nRadius);
+					// curEdges = edges.filter(d => parseDate(d.month) == nRadius);
+					// console.log(curNodes);
 					// adjust the text on the range slider
 
 					d3.select("#nRadius-value").text(nRadius);
 					d3.select("#nRadius").property("value", nRadius);
-					timeIndex = nRadius;
+					//timeIndex = nRadius;
 
 					
 					// Update nodes 
-					node = node.data(curNodes)
-					node.exit().remove();
+					svg1.selectAll('circle.node').attr('r', function (d) {
+						if (d.month == nRadius) {
+							console.log("updated r");
+							console.log(d.radius);
+							return d.radius;
+						} else {
+							console.log("not updated r")
+							return 0;
+						}
+					});
+					
+					
 					
 
 					
-					node.enter()
-					.append('circle')
-					.attr('class','node')
-					.attr('r', d => radius_scale(d.value));
+					// node.enter()
+					// .append('circle')
+					// .attr('class','node')
+					// .attr('r', d => radius_scale(d.value));
 					
 
 					
 
-  					// Update links
-  					// var link = svg1.append("g").selectAll('line').data(curEdges);
-  					// link.exit().remove();
-  					// link.enter()
-  					// .append('line')
-  					// .attr('class','link')
-  					// .attr('stroke-width', d => 5);
+  					//Update links
+  					link = link.attr('stroke-width', function(d) {
+  						if (d.month == nRadius) {
+  							return Math.abs(d.value)*2;
+  						} else {
+  							return 0;
+  						}
+  					})
+  					.merge(link);
   					
-  					
 
-  					simulation.nodes(curNodes)
-  						.restart();
   					simulation.on("tick", ticked);
-  						
-
-  					// simulation.force("link")
-  					// 	.links(curEdges);
 
   					
-  						
+
 
 
   					function ticked() {
-  						// link
-  						// .attr("x1", function(d) { return d.source.x; })
-  						// .attr("y1", function(d) { return d.source.y; })
-  						// .attr("x2", function(d) { return d.target.x; })
-  						// .attr("y2", function(d) { return d.target.y; });
+  						svg1.selectAll('line.link')
+  						.attr("x1", function(d) { return d.source.x; })
+  						.attr("y1", function(d) { return d.source.y; })
+  						.attr("x2", function(d) { return d.target.x; })
+  						.attr("y2", function(d) { return d.target.y; });
 
-  						nodeG.selectAll('circle.node')
+  						svg1.selectAll('circle.node')
   						.attr("cx", function(d) { return d.x; })
   						.attr("cy", function(d) { return d.y; });
   					}
@@ -204,7 +198,7 @@
   			//});
 
 	function parseDate (dateString) {
-		var parser = d3.timeParse("%b-%y");
+		var parser = d3.timeParse("%y-%b");
 		var date = parser(dateString);
 		return (date.getFullYear() - 2012) * 12 +  date.getMonth();
 	}
