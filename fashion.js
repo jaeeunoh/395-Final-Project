@@ -68,6 +68,14 @@
 			// 		})
 			// 	}
 			// }
+		
+					for (var url of node_url) {
+				for (var i in nodes) {
+					if (nodes[i].id == url.Node) {
+						nodes[i].url = url.url;
+					}
+				}
+			}
 
 
 			// Create scales
@@ -92,7 +100,12 @@
 				.enter()
 				.append("circle")
 				//.attr('class', 'node')
-				.attr('r', d => radius_scale(d.value));
+				.attr('r', d => radius_scale(d.value))
+					.on("click", function(d){
+				d3.select('#img')
+				.attr('src', d.url);
+			});
+
 
 
 			// link = svg1.append("g")
@@ -157,7 +170,12 @@
 				node.enter()
 					.append('circle')
 					.attr('class', 'node')
-					.attr('r', d => radius_scale(d.value));
+					.attr('r', d => radius_scale(d.value))
+							.on("click", function(d){
+				d3.select('#img')
+				.attr('src', d.url);
+			});
+
 
 
 
