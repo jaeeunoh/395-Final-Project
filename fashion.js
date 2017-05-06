@@ -24,7 +24,7 @@ var simulation = d3.forceSimulation()
 d3.queue()
 .defer(d3.csv, "data-processing/node_list.csv")
 .defer(d3.csv, "data-processing/edge_list.csv")
-.defer(d3.csv, "node_url.csv")
+.defer(d3.csv, "data-processing/node_url.csv")
 .await(function(error, node_list, edge_list, node_url) {
 
 	// Create nodes of categories
