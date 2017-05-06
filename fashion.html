@@ -1,73 +1,68 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-        <title> Fashion Trends </title>
-        <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-        <script src="http://d3js.org/topojson.v1.min.js"></script>
-        <script type="text/javascript" src="vis/dist/vis.js"></script>
-        <link href="vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
-        <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
-        <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <link href="https://fonts.googleapis.com/css?family=Ek+Mukta" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    </head>
-    <body>
-        <div class="container-header">
-            <header>
-                <div class="navbar">
-                    <h1>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title> Fashion Trends </title>
+    <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+    <script type="text/javascript" src="vis/dist/vis.js"></script>
+    <link href="vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Ek+Mukta" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+</head>
+<body>
+    <div class="container-header">
+        <header>
+            <div class="navbar">
+                <h1>
                     Fashion Network
-                    </h1>
+                </h1>
+            </div>
+        </header>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="span9">
+                    <button type="button" id="start" class="button" >Play</button>
+                    <button type="button" id="pause" class="button" >Pause</button>
+                    <button type="button" id="stop" class="button" >Stop</button>
+                    <div>
+                        <label for="nRadius"
+                        style="display: inline-block; width: 500px; text-align: right">
+                        <span id="nRadius-value">…</span>
+                    </label>
+                    <input type="range" min="0" max="48" id="nRadius">
+                    
                 </div>
-            </header>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="span9">
-                        <button type="button" id="start" class="button" >Play</button>
-                        <button type="button" id="pause" class="button" >Pause</button>
-                        <button type="button" id="stop" class="button" >Stop</button>
-                        <div>
-                            <label for="nRadius"
-                                style="display: inline-block; width: 500px; text-align: right">
-                                <span id="nRadius-value">…</span>
-                            </label>
-                            <input type="range" min="0" max="48" id="nRadius">
-                            
-                        </div>
-                    </div>
-                    <div class="tick">
-                    </div>
-                </div>3
+            </div>
+            <div class="tick">
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="network" style="position:relative;">
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                <div class="event_name">
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="network" style="position:relative;">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="event_name">
                 <p id="name"> </p>
-                </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="col-xs-12">
-                        <img id="img" width="350">
-                    </div>
-                </div>
-
             </div>
         </div>
-        <script type="text/javascript" src="fashion.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    </body>
+        <div class="col-sm-4">
+            <div class="col-xs-12">
+                <img id="img" width="350">
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript" src="fashion.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</body>
 </html>
