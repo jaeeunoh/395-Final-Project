@@ -48,6 +48,9 @@ body {
 }
 
 .event_name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  color: black;
   font-size: 35px;
   text-align: center;
 }

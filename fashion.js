@@ -18,7 +18,8 @@
 			return d.id;
 		}).distance(20).strength(0.5))
 		.force("charge", d3.forceManyBody())
-		.force("center", d3.forceCenter(svg_w1 / 2, svg_h1 / 2));
+		.force("center", d3.forceCenter(svg_w1 / 2, svg_h1 / 2))
+		.force('collide', d3.forceCollide(node => node.radius * 2));
 
 	d3.queue()
 		.defer(d3.csv, "data-processing/node_list.csv")
@@ -109,15 +110,52 @@
 				.enter()
 				.append("circle")
 				.attr('class', 'node')
-				.call(d3.drag()
+				.attr("xlink:href", function(d) {
+
+					if (d.group == "Event") {
+						console.log(d.url);
+						return d.url;
+
+					}
+				})
+
+
+			.call(d3.drag()
 					.on("start", dragstarted)
 					.on("drag", dragged)
 					.on("end", dragended))
-							.on("click", function(d){
-				d3.select('#img')
-				.attr('src', d.url);
-			});
+				.on("click", function(d) {
+					d3.select('#img')
+						.attr('src', d.url);
+					var t = d.id;
+					d3.select("#name")
+						.text(function(d) {
+							return t;
+						})
+				});
+			var label = svg1.selectAll(".mytext")
+				.data(nodes)
+				.enter()
+				.append("text")
+				.text(function(d) {
+					return d.id;
+				})
+				.style("text-anchor", "middle")
+				.style("fill", "#555")
+				.style("font-family", "Arial")
+				.style("font-size", 5);
 			//.attr('class', 'node')
+			var image = svg1.selectAll("img")
+				.data(nodes)
+				.enter()
+				.append("img")
+				.attr("xlink:href", function(d) {
+					if (d.group == "Event") {
+						return d.url;
+					}
+				})
+				.attr("width", 50)
+			.attr("height", 50);
 			simulation = simulation.nodes(nodes).restart();
 
 
@@ -157,8 +195,30 @@
 
 				// Update nodes 
 				node = node.attr('r', function(d) {
+						if (d.group == "Event") {
+							return radius_scale(100);
+						}
 						return radius_scale(eval("d.value" + nRadius));
 					})
+					.attr("fill", function(d) {
+						if (d.group == "Event") {
+							return "red";
+						} else {
+							return radius_color(eval("d.value"));
+						}
+					})
+					.append("text")
+					.text(function(d) {
+						if (d.group == "Clothing") {
+							var t = d.id;
+							console.log(d.id);
+							return t;
+						}
+					})
+					.attr("dx", 6)
+					.attr("dy", 10)
+					.attr("fill", "black")
+					.attr("font-size", "40px")
 					.merge(node);
 
 				// node.enter()
@@ -199,6 +259,18 @@
 						.attr("cy", function(d) {
 							return d.y;
 						});
+					label.attr("x", function(d) {
+							return d.x;
+						})
+						.attr("y", function(d) {
+							return d.y - 10;
+						});
+					image.attr("x", function(d) {
+							return d.x;
+						})
+						.attr("y", function(d) {
+							return d.y - 10;
+						});
 				}
 				var myTimer;
 				d3.select("#start").on("click", function() {
@@ -233,22 +305,31 @@
 
 	// Dragging helper functions that use simulation 
 	function dragstarted(d) {
-		if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-		d.fx = d.x;
-		d.fy = d.y;
+		// if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+		// force.stop();
+		// d.fx = d.x;
+		// d.fy = d.y;
+		force.stop();
 	}
 
 	// Dragging helper functions that do not need simulation
 	function dragended(d) {
-		if (!d3.event.active) simulation.alphaTarget(0);
-		d.fx = null;
-		d.fy = null;
+		// if (!d3.event.active) simulation.alphaTarget(0);
+		// d.fx = null;
+		// d.fy = null;
+		// 
+		d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+		tick();
+		force.resume();
 	}
 
 
 	function dragged(d) {
-		d.fx = d3.event.x;
-		d.fy = d3.event.y;
+		d.px += d3.event.dx;
+		d.py += d3.event.dy;
+		d.x += d3.event.dx;
+		d.y += d3.event.dy;
+		tick();
 	}
 
 	// Color by group
