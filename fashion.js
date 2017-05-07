@@ -22,8 +22,8 @@ return d.id;
 .force('collide', d3.forceCollide(node => node.radius * 2.5).strength(0.5));
 
 d3.queue()
-.defer(d3.csv, "data-processing/node_list.csv")
-.defer(d3.csv, "data-processing/edge_list.csv")
+.defer(d3.csv, "data-processing/node_list2.csv")
+.defer(d3.csv, "data-processing/edge_list2.csv")
 .defer(d3.csv, "data-processing/node_url.csv")
 .await(function(error, node_list, edge_list, node_url) {
 
@@ -115,7 +115,7 @@ nodeG = svg1.append("g")
 
 
 node = nodeG.selectAll('circle')
-.data(linkNodes)
+.data(nodes)
 .enter()
 .append("circle")
 .attr('class', 'node');
@@ -137,6 +137,13 @@ d3.select("#name")
 return t;
 })
 });
+
+  var linkNode = svg.selectAll(".link-node")
+      .data(linkNodes)
+    .enter().append("circle")
+      .attr("class", "link-node")
+      .attr("r", 1)
+      .style("fill", "#ccc");
 
 //Create labels for each circles
 
@@ -354,7 +361,7 @@ return d.x;
 .attr("cy", function(d) {
 return d.y;
 });
-linkNodes.attr("cx", function(d) {
+svg1.selectAll("link-node").attr("cx", function(d) {
 return d.x = (d.source.x + d.target.x) * 0.5;
 
 })
