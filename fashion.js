@@ -262,24 +262,26 @@ updateView(this.value);
 updateView(0);
 
 function formatDate(date) {
-	var months = [
-	"January", "February", "March", 
-	"April", "May", "June", "July", 
-	"August", "September", "October", 
-	"November", "December"];
-	var month = date.getMonth();
-	var year = date.getFullYear(); 
+		var months = [
+		"January", "February", "March",
+		"April", "May", "June", "July",
+		"August", "September", "October",
+		"November", "December"
+		];
 
-	return months[month] + ' ' + year;
-}
+		var month = date.getMonth();
+		var year = date.getFullYear();
 
-//update the elements
-function updateView(nRadius) {
-	var startdate = new Date (2012, 0, 1); 
-	var updated = new Date(startdate.setMonth(startdate.getMonth() + nRadius)); 
+		return months[month] + ' ' + year;
+	}
 
-d3.select("#nRadius-value").text(formatDate(updated));
-d3.select("#nRadius").property("value", nRadius);
+	//update the elements
+	function updateView(nRadius) {
+		var startdate = new Date(2012, 0, 1); 
+		var updated = new Date(startdate.setMonth(startdate.getMonth() + nRadius));
+
+		d3.select("#nRadius-value").text(formatDate(updated));
+		d3.select("#nRadius").property("value", nRadius);
 
 // Update nodes 
 node = node.attr('r', function(d) {

@@ -17,6 +17,12 @@ footer {
   border: 0px #fff;
 }
 
+.link {
+  fill:none;
+  stroke:#bbb;
+  opacity: 0.2;
+}
+
 .footer {
     text-align: center;
     margin-top: 1px;
