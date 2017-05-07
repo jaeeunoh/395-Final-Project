@@ -1,6 +1,6 @@
 //Creating svg element
 var svg_w1 = 900;
-var svg_h1 = 500;
+var svg_h1 = 900;
 var svg1 = d3.select("div.network").append("svg")
 .attr("width", svg_w1)
 .attr("height", svg_h1);
