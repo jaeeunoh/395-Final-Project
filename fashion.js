@@ -441,7 +441,7 @@ d3.queue()
 					if (d.group == "Event") {
 						if (d.active == 1) {
 							console.log(d.id + "active");
-							return "120px";
+							return "90px";
 						} else {
 							return "50px";
 						}
