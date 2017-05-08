@@ -14,7 +14,19 @@ var months = [];
 var myTimer;
 //Array for autocompletion
 var autocomplete_array = [];
+//Speed of the slider
+var speed = 0;
 
+//Function to change the speed for 3 different levels
+function changeSpeed() {
+	if (document.getElementById("speed").value == "1000") {
+		speed = 1000;
+	} else if (document.getElementById("speed").value == "2000") {
+		speed = 2000;
+	} else if (document.getElementById("speed").value == "4000") {
+		speed = 4000;
+	}
+}
 //Loading data and create visualization
 d3.queue()
 	.defer(d3.csv, "data-processing/node_list.csv")
@@ -92,7 +104,7 @@ d3.queue()
 
 		var link_scale = d3.scaleLinear()
 			.domain([0.7, 1])
-			.range([0.5, 3]);
+			.range([0.5, 5]);
 
 
 
@@ -135,7 +147,7 @@ d3.queue()
 			.style('opacity', 0.8);
 
 		// Draggable
-		nodeG.call(d3.drag()
+		node.call(d3.drag()
 			.on("start", dragstarted)
 			.on("drag", dragged)
 			.on("end", dragended));
@@ -220,7 +232,13 @@ d3.queue()
 
 		/* ---------- Highlight neighboring nodes ------------------ */
 		// Mouse over to highlight the connected nodes 
+		var tool_tip = d3.tip()
+			.attr("class", "d3-tip")
+			.offset([-8, 0]);
+
+		node.call(tool_tip);
 		node.on('mouseover', function(d) {
+				tool_tip.html(d.id).show();
 				if (selectedNodes.length == 0) {
 					searchNode([d.id]);
 				} else {
@@ -239,6 +257,7 @@ d3.queue()
 				}
 			})
 			.on('mouseout', function(d) {
+				tool_tip.hide();
 				if (selectedNodes.length == 0) {
 					reset();
 				} else {
@@ -417,7 +436,7 @@ d3.queue()
 				.merge(node)
 				.style("fill", function(d) {
 					if (d.group == "Clothing") {
-						return "#801515";
+						return "#000";
 					} else {
 						return "transparent";
 					}
@@ -435,9 +454,9 @@ d3.queue()
 				})
 				.attr("stroke", function(d) {
 					if (eval("d.value" + nRadius) < 0) {
-						return "#4B04AA";
+						return "#003399";
 					} else {
-						return "#1B453D";
+						return "#801515";
 					}
 				})
 				.merge(link);
@@ -459,10 +478,15 @@ d3.queue()
 			// 		return d.url;
 			// 	})
 
-				// Create timer functions 
+			// Create timer functions 
 			d3.select("#start").on("click", function() {
 				clearInterval(myTimer);
+				if (speed == 0) {
+					speed = 1000;
+				}
 				myTimer = setInterval(function() {
+
+					console.log(speed);
 					var b = d3.select("#nRadius");
 					var t = (+b.property("value") + 1) % (+b.property("max") + 1);
 					if (t == 0) {
@@ -475,7 +499,7 @@ d3.queue()
 					d3.select("#nRadius").property("value", t);
 					b.property("value", t);
 					updateView($("#nRadius").val());
-				}, 1000);
+				}, speed);
 			});
 
 			d3.select("#pause").on("click", function() {
@@ -519,8 +543,8 @@ d3.queue()
 
 		// Dragging helper functions that use simulation 
 		function dragstarted(d) {
-			d.fx = d.x;
-			d.fy = d.y;
+			d.x = d.x;
+			d.y = d.y;
 		};
 
 		function dragged(d) {

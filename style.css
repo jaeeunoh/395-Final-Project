@@ -1,7 +1,11 @@
-
 body {
   font-family: "Poppins", sans-serif;
   background: #e6e9f1 !important;
+}
+
+.e_img {
+  margin-bottom: 20px;
+  margin-right: 10px;
 }
 
 .ui-autocomplete .highlight {
@@ -10,6 +14,12 @@ body {
 
 footer {
     padding: 70px 0px;
+}
+
+.text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .year_tick {
@@ -255,4 +265,34 @@ input[type=range]:focus::-ms-fill-lower {
 }
 input[type=range]:focus::-ms-fill-upper {
   background: #A3CEE1;
+}
+
+/* Tool=tip */
+.d3-tip {
+  line-height: 1;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips specifically */
+.d3-tip.n:after {
+  margin: -2px 0 0 0;
+  top: 100%;
+  left: 0;
 }
