@@ -11,6 +11,8 @@ var toggle = 0;
 var max_num = 0;
 var months = [];
 var timeIndex = 3;
+var myTimer;
+
 
 
 
@@ -318,7 +320,6 @@ function formatDate(date) {
 
 
 	// Create timer functions 
-	var myTimer;
 	d3.select("#start").on("click", function() {
 		clearInterval(myTimer);
 		myTimer = setInterval(function() {
