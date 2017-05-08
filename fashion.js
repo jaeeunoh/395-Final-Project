@@ -17,12 +17,12 @@ var speed = 0;
 
 //Function to change the speed for 3 different levels
 function changeSpeed() {
-	if (document.getElementById("speed").value == "1000") {
-		speed = 1000;
-	} else if (document.getElementById("speed").value == "2000") {
-		speed = 2000;
-	} else if (document.getElementById("speed").value == "4000") {
-		speed = 4000;
+	if (document.getElementById("speed").value == "800") {
+		speed = 800;
+	} else if (document.getElementById("speed").value == "1500") {
+		speed = 1500;
+	} else if (document.getElementById("speed").value == "3000") {
+		speed = 3000;
 	}
 }
 //Loading data and create visualization
@@ -220,11 +220,13 @@ d3.queue()
 						link.filter(function(l) {
 								return l.source.id == d.id;
 							})
-							.attr("stroke-width", d => link_scale(Math.abs(d.value)) * 1.5)
+							.attr("stroke-width", d => link_scale(Math.abs(eval("d.value" * 1.5))))
 							.style('opacity', 1);
 					}
 				}
 			})
+
+
 			.on('mouseout', function(d) {
 				tool_tip.hide();
 				if (selectedNodes.length == 0) {
@@ -240,7 +242,7 @@ d3.queue()
 							return selectedNodes.indexOf(l.source.id) == -1;
 						})
 						.style('opacity', 0.1)
-						.attr("stroke-width", d => link_scale(Math.abs(d.value)));
+						.attr("stroke-width", d => link_scale(Math.abs(eval("d.value"))));
 				}
 
 			});
@@ -350,14 +352,14 @@ d3.queue()
 				.style("opacity", function(d) {
 					return nodeIdArray.indexOf(d.source.id) != -1 ? 1 : 0.1;
 				})
-				.attr("stroke-width", d => link_scale(Math.abs(d.value)) * 1.5);
+				.attr("stroke-width", d => link_scale(Math.abs(eval("d.value" * 1.5))));
 		}
 
 		function reset() {
 			node.attr('r', d => radius_scale(d.value))
 				.style('opacity', 0.8);
 			link.style('opacity', 0.5)
-				.attr("stroke-width", d => link_scale(Math.abs(d.value)));
+				.attr("stroke-width", d => link_scale(Math.abs(eval(d.value))));
 		}
 		
 		/* ------------ Update view based on Time -------------------- */
@@ -440,7 +442,6 @@ d3.queue()
 			image = image.attr('width', function(d) {
 					if (d.group == "Event") {
 						if (d.active == 1) {
-							console.log(d.id + "active");
 							return "90px";
 						} else {
 							return "50px";
@@ -468,8 +469,6 @@ d3.queue()
 					speed = 1000;
 				}
 				myTimer = setInterval(function() {
-
-					console.log(speed);
 					var b = d3.select("#nRadius");
 					var t = (+b.property("value") + 1) % (+b.property("max") + 1);
 					if (t == 0) {

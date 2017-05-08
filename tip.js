@@ -277,13 +277,10 @@ d3.tip = function() {
   // Returns an Object {n, s, e, w, nw, sw, ne, se}
   function getScreenBBox() {
     var targetel   = target || d3.event.target;
-    console.log("target: " + target);
-    console.log("event target: " + d3.event.target);
 
     while ('undefined' === typeof targetel.getScreenCTM && 'undefined' === targetel.parentNode) {
         targetel = targetel.parentNode;
     }
-    console.log("targetel:" + targetel);
 
     var bbox       = {},
         matrix     = targetel.getScreenCTM(),
@@ -293,7 +290,6 @@ d3.tip = function() {
         x          = tbbox.x,
         y          = tbbox.y
 
-    console.log('matrix: ' + matrix);
     point.x = x
     point.y = y
     bbox.nw = point.matrixTransform(matrix)
