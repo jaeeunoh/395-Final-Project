@@ -15,6 +15,9 @@ style.css: contains styling for different elements of the page
 node_list2.csv: file containing node list
 edge_list2.csv: file containing edges
 node_url.csv: file containing url for images of all nodes
+pic/: contain pictures created for the events
+wiki: file containing url to wiki pages of the events
+
 
 #####Citations: 
 *http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/* for autocompletion and highlight function
