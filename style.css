@@ -13,7 +13,15 @@ footer {
     box-shadow: -2px -1px 88px 0px rgba(255,255,255,0.9);
 }
 
+.event_img {
+  display: block;
+  padding: 10px 10px;
+  margin-right: 10px;
+  position: relative;
+}
+
 .border {
+  margin-top: 10px;
   border: 0px #fff;
 }
 
@@ -90,7 +98,7 @@ footer {
   font-family: "Poppins", sans-serif;
 }
 
-.event_name {
+.name {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
   color: black;

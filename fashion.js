@@ -11,7 +11,7 @@ var toggle = 0;
 var max_num = 0;
 var months = [];
 var timeIndex = 3;
-
+var linkNodes = [];
 
 var simulation = d3.forceSimulation()
 .force("link", d3.forceLink().id(function(d) {
@@ -66,7 +66,18 @@ nodes[i].url = url.url;
 }
 }
 }
-var linkNodes = [];
+
+edges.forEach(function(d) {
+	d.sum = 0;
+	for (var i = 0; i < 48; i++) {
+		d.sum += eval("Math.abs(d.value"+i + ")");
+	}
+	d.sum = d.sum/48;
+});
+
+edges = edges.filter(d => d.sum >= 0.5);
+console.log(edges);
+
 edges.forEach(function(link) {
 linkNodes.push({
 source: nodes[link.source],
@@ -302,6 +313,11 @@ return "transparent";
 
 //Update links
 link = link.attr('stroke-width', function(d) {
+// if (eval("Math.abs(d.value" + nRadius + ")") < 0.7) {
+// 			return 0;
+// 		} else {
+// 		 return link_scale(eval("Math.abs(d.value" + nRadius + ")"));
+// 		}
 return link_scale(eval("Math.abs(d.value" + nRadius + ")"));
 })
 .attr("stroke", function(d) {
