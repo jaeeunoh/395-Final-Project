@@ -235,7 +235,7 @@ d3.queue()
 							return selectedNodes.indexOf(n.id) == -1;
 						})
 						.attr('r', d => radius_scale(d.value))
-						.style('opacity', 0.3);
+						.style('opacity', 0.2);
 
 					link.filter(function(l) {
 							return selectedNodes.indexOf(l.source.id) == -1;
