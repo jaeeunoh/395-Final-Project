@@ -220,7 +220,6 @@ d3.queue()
 						link.filter(function(l) {
 								return l.source.id == d.id;
 							})
-							.attr("stroke-width", d => link_scale(Math.abs(eval("d.value" * 1.5))))
 							.style('opacity', 1);
 					}
 				}
@@ -241,8 +240,7 @@ d3.queue()
 					link.filter(function(l) {
 							return selectedNodes.indexOf(l.source.id) == -1;
 						})
-						.style('opacity', 0.1)
-						.attr("stroke-width", d => link_scale(Math.abs(eval("d.value"))));
+						.style('opacity', 0.1);
 				}
 
 			});
@@ -351,15 +349,13 @@ d3.queue()
 			link
 				.style("opacity", function(d) {
 					return nodeIdArray.indexOf(d.source.id) != -1 ? 1 : 0.1;
-				})
-				.attr("stroke-width", d => link_scale(Math.abs(eval("d.value" * 1.5))));
-		}
+				});
+			}
 
 		function reset() {
 			node.attr('r', d => radius_scale(d.value))
 				.style('opacity', 0.8);
-			link.style('opacity', 0.5)
-				.attr("stroke-width", d => link_scale(Math.abs(eval(d.value))));
+			link.style('opacity', 0.5);
 		}
 		
 		/* ------------ Update view based on Time -------------------- */
@@ -398,7 +394,7 @@ d3.queue()
 			d3.select("#nRadius-value").text(formatDate(updated))
 				.style("font-family", "Poppins")
 				.style("font-size", "20px")
-				.style("text-align", "middle");
+				.style("text-align", "center");
 			d3.select("#nRadius").property("value", nRadius);
 
 			// Update positions
@@ -492,7 +488,7 @@ d3.queue()
 				d3.select("#nRadius-value").text(formatDate(new Date(2012, 0, 1)))
 					.style("font-family", "Poppins")
 					.style("font-size", "20px")
-					.style("text-align", "middle");
+					.style("text-align", "center");
 				d3.select("#nRadius").property("value", 0);
 				clearInterval(myTimer);
 			});
