@@ -42,7 +42,8 @@ d3.queue()
 				group: event.Type,
 				value: event.value0,
 				x: event.x,
-				y: event.y
+				y: event.y,
+				active: event.active0
 			};
 			// Create value for edges for each object
 			for (i = 0; i < 48; i++) {
@@ -252,6 +253,7 @@ d3.queue()
 						link.filter(function(l) {
 								return l.source.id == d.id;
 							})
+							.attr("stroke-width", d => link_scale(Math.abs(d.value)) * 1.5)
 							.style('opacity', 1);
 					}
 				}
@@ -270,7 +272,8 @@ d3.queue()
 					link.filter(function(l) {
 							return selectedNodes.indexOf(l.source.id) == -1;
 						})
-						.style('opacity', 0.1);
+						.style('opacity', 0.1)
+						.attr("stroke-width", d => link_scale(Math.abs(d.value)));
 				}
 
 			});
@@ -369,7 +372,7 @@ d3.queue()
 					return nodeIdArray.indexOf(d.id) != -1 ? radius_scale(d.value) * 1.5 : radius_scale(d.value);
 				})
 				.style("opacity", function(d) {
-					return nodeIdArray.indexOf(d.id) != -1 ? 1 : 0.3;
+					return nodeIdArray.indexOf(d.id) != -1 ? 1 : 0.2;
 				});
 
 			// Updating connected link
@@ -377,13 +380,15 @@ d3.queue()
 			link
 				.style("opacity", function(d) {
 					return nodeIdArray.indexOf(d.source.id) != -1 ? 1 : 0.1;
-				});
+				})
+				.attr("stroke-width", d => link_scale(Math.abs(d.value)) * 1.5);
 		}
 
 		function reset() {
 			node.attr('r', d => radius_scale(d.value))
 				.style('opacity', 0.8);
-			link.style('opacity', 0.5);
+			link.style('opacity', 0.5)
+				.attr("stroke-width", d => link_scale(Math.abs(d.value)));
 		}
 		/* ------------ Update view based on Time -------------------- */
 
@@ -460,7 +465,30 @@ d3.queue()
 					}
 				})
 				.merge(link);
-
+			// Update images
+			image = image.attr('width', function(d) {
+					if (d.group == "Event") {
+						if (d.active == 1) {
+							console.log(d.id + "active");
+							return "120px";
+						} else {
+							return "50px";
+						}
+					} else {
+						return "0px";
+					}
+				})
+				.attr('height', function(d) {
+					if (d.group == "Event") {
+						if (d.active == 1) {
+							return "120px";
+						} else {
+							return "50px";
+						}
+					} else {
+						return "0px";
+					}
+				});
 			var event_array = [];
 			//Update event image url
 			// event_image.attr('src', function(d) {
@@ -584,7 +612,6 @@ d3.queue()
 		svg.append('g')
 			.attr('transform', 'translate(' + -5 + ', ' + 1 + ')')
 			.call(axis);
-
 		var year = ["2012", "2013", "2014", "2015"];
 
 		// Create the labels for the time range ticks 
