@@ -274,7 +274,11 @@ function formatDate(date) {
 		var startdate = new Date(2012, 0, 1); 
 		var updated = new Date(startdate.setMonth(startdate.getMonth() + nRadius));
 
-		d3.select("#nRadius-value").text(formatDate(updated));
+		d3.select("#nRadius-value").text(formatDate(updated))
+		.style("font-family", "Poppins")
+		.style("font-size", "20px")
+		.style("text-align", "middle");
+
 		d3.select("#nRadius").property("value", nRadius);
 
 	// Update positions

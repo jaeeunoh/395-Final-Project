@@ -291,7 +291,9 @@ function formatDate(date) {
 		var startdate = new Date(2012, 0, 1); 
 		var updated = new Date(startdate.setMonth(startdate.getMonth() + nRadius));
 
-		d3.select("#nRadius-value").text(formatDate(updated));
+		d3.select("#nRadius-value").text(formatDate(updated))
+		.attr("font-family", "sans-serif")
+		.attr("font-size", "25px");
 		d3.select("#nRadius").property("value", nRadius);
 
 // Update nodes 

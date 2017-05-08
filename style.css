@@ -8,6 +8,10 @@ footer {
     padding: 70px 0px;
 }
 
+.div {
+  box-shadow: -2px -1px 88px 0px rgba(255,255,255,0.9);
+}
+
 .page-body {
     background: #e6e9f1;
     box-shadow: -2px -1px 88px 0px rgba(255,255,255,0.9);
@@ -15,14 +19,20 @@ footer {
 
 .event_img {
   display: block;
-  padding: 10px 10px;
-  margin-right: 10px;
-  position: relative;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .border {
-  margin-top: 10px;
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
   border: 0px #fff;
+}
+
+.border_side {
+  margin-top: 15px; 
+  border: 2.5px 2.5px #fff;
 }
 
 .link {
@@ -100,9 +110,9 @@ footer {
 
 .name {
   font-family: 'Poppins', sans-serif;
-  font-weight: 500;
+  font-weight: 700;
   color: black;
-  font-size: 35px;
+  font-size: 25px;
   text-align: center;
 }
 
