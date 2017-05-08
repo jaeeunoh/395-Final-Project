@@ -542,7 +542,6 @@ d3.queue()
 		var width = 1140,
 			height = 20,
 			padding = 10;
-			margin = 140;
 
 		// Create svg for time range scales 
 		var svg = d3.select('div.tick').append('svg')
