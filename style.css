@@ -4,10 +4,20 @@ body {
   background: #e6e9f1 !important;
 }
 
+.ui-autocomplete .highlight {
+      text-decoration: underline;
+}
+
 footer {
     padding: 70px 0px;
 }
 
+.year_tick {
+  font-weight: bold;
+  font-size: 10px;
+  color: black;
+  font-family: 'Poppins', sans-serif;
+}
 .div {
   box-shadow: -2px -1px 88px 0px rgba(255,255,255,0.9);
 }
@@ -21,6 +31,13 @@ footer {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  overflow-y:auto;
+}
+
+@media screen and (min-width: 1024px) {
+    myNewDivHeight{
+        height:10px;
+    }
 }
 
 .border {
@@ -37,8 +54,6 @@ footer {
 
 .link {
   fill:none;
-  stroke:#bbb;
-  opacity: 0.2;
 }
 
 .footer {
@@ -78,7 +93,7 @@ footer {
 }
 
 .button {
-  border: none;
+  border:none;
   font-family: inherit;
   font-size: 16px;
   color: #1abc9c;

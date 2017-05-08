@@ -1,100 +1,102 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
-    <title> Fashion Trends </title>
-    <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="http://d3js.org/topojson.v1.min.js"></script>
-    <script type="text/javascript" src="vis/dist/vis.js"></script>
-    <link href="vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
-    <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
-    <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Ek+Mukta" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-</head>
-<body>
-    <div class="container-header page-body">
-        <header>
-            <div class="navbar">
-                <h1>
-                    Fashion Network
-                </h1>
-                <p text-align="middle"> Use the interactive network to explore the fashion trend change from 2012 to 2016. 
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+        <title> Fashion Trends </title>
+        <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+            rel = "stylesheet">
+            <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+            <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script><script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+            <script src="http://d3js.org/topojson.v1.min.js"></script>
+            <script type="text/javascript" src="vis/dist/vis.js"></script>
+            <link href="vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+            <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+            <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+            <link rel="stylesheet" type="text/css" href="style.css">
+            <link href="https://fonts.googleapis.com/css?family=Ek+Mukta" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.8.0/css/bootstrap-slider.min.css" rel="stylesheet" type="text/css" />
+            <link href="select2.min.css" rel="stylesheet" />
+        </head>
+        <body>
+            <div class="container-header page-body">
+                <header>
+                    <div class="navbar">
+                        <h1>
+                        Fashion Network
+                        </h1>
+                        <p> Use the interactive network to explore the fashion trend change from 2012 to 2016.
+                        </div>
+                    </header>
                 </div>
-            </header>
-        </div>
-        <div class="container page-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="span9">
-                        <button type="button" id="start" class="button"> 
-                            <img src="http://www.free-icons-download.net/images/play-button-icon-93570.png" width="40px" height="40px">
-                        </button>
-                        <button type="button" id="pause" class="button">
-                            <img src="http://freevector.co/wp-content/uploads/2014/01/3918-pause-button1-200x200.png" width="20px" height="20px">
-                        </button>
-                        <button type="button" id="stop" class="button">
-                            <img src="http://freeiconbox.com/icon/256/26518.png" width="30px" height="30px">
-                        </button>
-                        <div>
-                            <label for="nRadius"
-                            style="display: inline-block; width: 600px; text-align: right">
-                            <span id="nRadius-value">…</span>
-                        </label>
-                        <input type="range" min="0" max="48" id="nRadius">
-
+                <div class="container page-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="span9">
+                                <button type="button" id="start" class="button">
+                                <img src="http://www.free-icons-download.net/images/play-button-icon-93570.png" width="40px" height="40px">
+                                </button>
+                                <button type="button" id="pause" class="button">
+                                <img src="http://freevector.co/wp-content/uploads/2014/01/3918-pause-button1-200x200.png" width="20px" height="20px">
+                                </button>
+                                <button type="button" id="stop" class="button">
+                                <img src="http://freeiconbox.com/icon/256/26518.png" width="30px" height="30px">
+                                </button>
+                                <div>
+                                    <label for="nRadius"
+                                        style="display: inline-block; width: 600px; text-align: right">
+                                        <span id="nRadius-value">…</span>
+                                    </label>
+                                    <input type="range" min="0" max="47" id="nRadius">
+                                </div>
+                            </div>
+                            <div class="tick">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="tick">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container page-body" width="1170px">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="network border" style="position:relative;">
-                <div class="ui-widget">
-                            <input id="search">
-                            <button type="button" id="autocomplete" >Search</button>
+                <div class="container page-body" width="1170px">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="network border" style="position:relative;">
+                                <div class="ui-widget">
+                                    <input id="search"  type="text" placeholder="Fashion Category">
+                                    <button type="button" id="autocomplete" >Search</button>
+                                    <button type="button" id="reset"> Reset </button>
+                                </div>
+                            </div>
                         </div>
+                        <div class="col-sm-4 border name">
+                            <p style="font-size: 25px"> Fashion Events Happening... </p>
+                        </div>
+                        <div class="col-sm-4 border div">
+                            <div class="col-xs-12 div myNewDivHeight">
+                                <div class="event_img" id="event_img"> </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 border name">
+                            <p id="category_name"> </p>
+                        </div>
+                        <div class="col-sm-4 border div">
+                            <div class="col-xs-12 div">
+                                <img class="event_img" id="category_img" width="300">
+                            </div>
+                        </div>
+                    </div>
+                    <p> Data Source: Google Trend API </p>
                 </div>
-            </div>
-            <div class="col-sm-4 border name">
-                    <p style="font-size: 25px"> Fashion Events Happening... </p>
-            </div>
-            <div class="col-sm-4 border div">
-                <div class="col-xs-12 div">
-                    <div class="event_img" id="event_img"> </div>
+                <div class="footer">
+                    <footer>
+                        <p>Created by Trang Nguyen, Linh Pham, and JaeEun Oh</p>
+                    </footer>
                 </div>
-            </div>
-            <div class="col-sm-4 border name">
-                    <p id="category_name"> </p>
-            </div>
-            <div class="col-sm-4 border div">
-                <div class="col-xs-12 div">
-                    <img class="event_img" id="category_img" width="300">
-                </div>
-</div>
-        </div>
-        <p text-align="center"> Data Source: Google Trend API </p>
-    </div>
-
-                       <div class="footer">
-                          <footer>
-                          <p>Created by Trang Nguyen, Linh Pham, and JaeEun Oh</p>
-                         </footer>
-                       </div>
-
-
-
-<!-- script --> 
-<script type="text/javascript" src="fashion(fixed node).js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-</body>
-</html>
+                <!-- script -->
+                <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+                <script type="text/javascript" src="fashion(fixed node).js"></script>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+            </body>
+        </html>
