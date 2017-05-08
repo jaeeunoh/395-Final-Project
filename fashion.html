@@ -35,11 +35,12 @@
                         <div class="col-md-12">
                             <div class="span9">
                                 <select id="speed" onchange="changeSpeed()">
-                                    <!-- <option selected disabled>Select your speed option</option> -->
+                                    <!-- Options to choose the timeline play speed-->
                                     <option value="4000">Low Speed</option>
                                     <option value="2000">Medium Speed</option>
                                     <option value="1000" selected>Fast Speed</option>
                                 </select>
+                                <!-- Creating the play, pause, and reset buttons-->
                                 <button type="button" id="start" class="button">
                                 <img src="http://www.free-icons-download.net/images/play-button-icon-93570.png" width="40px" height="40px">
                                 </button>
@@ -50,6 +51,7 @@
                                 <img src="http://freeiconbox.com/icon/256/26518.png" width="30px" height="30px">
                                 </button>
                                 <div>
+                                    <!-- Create the time range-->
                                     <label for="nRadius"
                                         style="display: inline-block; width: 600px; text-align: right">
                                         <span id="nRadius-value">…</span>
@@ -57,11 +59,13 @@
                                     <input type="range" min="0" max="47" id="nRadius">
                                 </div>
                             </div>
+                            <!-- Create the time range ticks-->
                             <div class="tick">
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Create network portion-->
                 <div class="container page-body" width="1170px">
                     <div class="row">
                         <div class="col-lg-8">
@@ -73,6 +77,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Create the cateogry side info panel -->
                         <div class="col-sm-4 border name">
                             <p id="category_name"> </p>
                         </div>
@@ -81,6 +86,7 @@
                                 <img class="event_img" id="category_img" width="300" align="bottom">
                             </div>
                         </div>
+                        <!-- Create the legend side info panel -->
                         <div class="col-sm-4 border name">
                             <p class="cateogry_name"> Legend </p>
                         </div>
@@ -90,32 +96,32 @@
                                     <svg width="50" height="50">
                                         <circle cx="20" cy="30" r="15" fill="#000"> </circle>
                                     </svg>
-                                    The size of the circle represents the popularity index in Google Trend API.
+                                    The size of the circle represents the popularity index of the fashion category in Google API.
                                 </p>
                                 <p class="text">
                                     <svg width="50" height="50">
                                     <line x1="10" y1="30" x2="40" y2="30" stroke="#801515" stroke-width="5"> </line>
                                 </svg>
                                 The red line represents the positive correlation between the category and the event.
-                            </p>
-                            <p class="text">
-                                <svg width="50" height="50">
-                                <line x1="10" y1="30" x2="40" y2="30" stroke="#003399" stroke-width="5"> </line>
-                            </svg>
-                            The blue line represents the negative correlation between the category and the event.
-                        </p>
-                        <p class="text">
-                            <img class="e_img" src="pic/imageedit_milan_women.gif" width=60px height=60px> </img>
-                            The image of the event is enlarged for the timeline 2 months before and after the actual occurence of the event.
-                        </p>
+                                </p>
+                                <p class="text">
+                                    <svg width="50" height="50">
+                                        <line x1="10" y1="30" x2="40" y2="30" stroke="#003399" stroke-width="5"> </line>
+                                    </svg>
+                                    The blue line represents the negative correlation between the category and the event.
+                                </p>
+                                <p class="text">
+                                    <img class="e_img" src="pic/imageedit_milan_women.gif" width=60px height=60px> </img>
+                                    The image of the event is enlarged for the timeline 2 months before and after the actual occurence of the event.
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <p> Data Source: Google Trend API </p>
+            <p> Data Source: Google Trend and Fashion 10,000 Database </p>
         </div>
         <div class="footer">
             <footer>
-                <p>Created by Trang Nguyen, Linh Pham, and JaeEun Oh</p>
+                <p class="text">Created by Trang Nguyen, Linh Pham, and JaeEun Oh</p>
             </div>
             <script type="text/javascript" src="fashion.js"></script>
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">

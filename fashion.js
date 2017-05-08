@@ -1,4 +1,4 @@
-//Creating svg element
+//Creating svg element 
 var svg_width = 900;
 var svg_height = 900;
 //Creating svg for the network
@@ -8,8 +8,6 @@ var svg_network = d3.select("div.network").append("svg")
 //Create array nodes and edges to contain data
 var nodes = [];
 var edges = [];
-//Create array to contain the date
-var months = [];
 //Keep track time of the slider
 var myTimer;
 //Array for autocompletion
@@ -29,11 +27,11 @@ function changeSpeed() {
 }
 //Loading data and create visualization
 d3.queue()
-	.defer(d3.csv, "data-processing/node_list.csv")
-	.defer(d3.csv, "data-processing/edge_list.csv")
-	.defer(d3.csv, "data-processing/node_url.csv")
+	.defer(d3.csv, "data-processing/node_list.csv") 
+	.defer(d3.csv, "data-processing/edge_list.csv") 
+	.defer(d3.csv, "data-processing/node_url.csv") // list containing url to a picture 
 	.await(function(error, node_list, edge_list, node_url) {
-		// Create nodes of categories
+		// Create nodes of categories and events 
 		for (var event of node_list) {
 			var obj = {};
 			obj = {
@@ -93,22 +91,20 @@ d3.queue()
 		});
 		edges = edges.filter(d => d.sum >= 0.5);
 
+		
 		/* ------------- Create different scales  ---------------------- */
+		// Create scale for node radius
 		var radius_scale = d3.scaleLinear()
 			.domain([0, 100])
 			.range([0, 20]);
 
-		// Create scales for node colors 
-		var radius_color = d3.scaleLinear()
-			.domain([0, 100])
-			.range(["pink", "#2b90f5"]);
-
+		// Create scale for edge link 
 		var link_scale = d3.scaleLinear()
 			.domain([0.7, 1])
 			.range([0.5, 5]);
 
 
-
+		// Assign source and target 
 		edges.forEach(function(d) {
 			for (var node of nodes) {
 				if (node.id == d.source) {
@@ -124,11 +120,13 @@ d3.queue()
 			}
 		});
 
+		
 		/* ------------- Create SVG element in the network container */
 		// Create link grouop
 		linkG = svg_network.append("g")
 			.attr("class", "links");
 
+		// Create links 
 		link = linkG.selectAll('path')
 			.data(edges)
 			.enter()
@@ -140,6 +138,7 @@ d3.queue()
 		nodeG = svg_network.append("g")
 			.attr("class", "nodes");
 
+		// Create nodes 
 		node = nodeG.selectAll('circle')
 			.data(nodes)
 			.enter()
@@ -147,7 +146,7 @@ d3.queue()
 			.attr('class', 'node')
 			.style('opacity', 0.8);
 
-		// Draggable
+		// Allow nodes to be draggable
 		node.call(d3.drag()
 			.on("start", dragstarted)
 			.on("drag", dragged)
@@ -156,10 +155,10 @@ d3.queue()
 		// Click to show the image on the right 
 		node.on("click", function(d) {
 			if (d.group == "Clothing") {
-				d3.select('#category_img')
+				d3.select('#category_img') // display cateogry image 
 					.attr('src', d.url);
 				var t = d.id;
-				d3.select("#category_name")
+				d3.select("#category_name") // display category name 
 					.text(function(d) {
 						return t;
 					})
@@ -167,7 +166,7 @@ d3.queue()
 
 		});
 
-		// Create images for each circles 
+		// Create event images for event circles 
 		var image = nodeG.selectAll("image")
 			.data(nodes)
 			.enter()
@@ -191,45 +190,13 @@ d3.queue()
 					return "0px";
 				}
 			});
+
+		// Allow event images to be draggable
 		image.call(d3.drag()
 			.on("start", dragstarted)
 			.on("drag", dragged)
 			.on("end", dragended));
-		// //Create images for events
-		// var event_image = d3.select('#event_img')
-		// 	.selectAll('img')
-		// 	.data(nodes)
-		// 	.enter()
-		// 	.append('img')
-		// 	.attr('width', '150px')
-		// 	.attr('height', '100px')
-		// 	.attr('src', function(d) {
-		// 		if (d.group == "Event" && eval("d.active" + 0) == 1) {
-		// 			return d.url;
-		// 		}
-		// 	});
-		// 	
-		var width_legend = 300;
-		var height_legend = 400;
-		var svg_legend = d3.select("div.event_img")
-			.append("svg")
-			.attr("width", width_legend)
-			.attr("height", height_legend);
-		var legend = svg_legend
-			.selectAll('rect')
-			.attr('class', 'legend')
-			.append('rect')
-			.attr('x', 150)
-			.attr('y', 200)
-			.attr('height', 100)
-			.attr('fill', 'red');
 
-		legend
-			.append('circle')
-			.attr('r', 5)
-			.attr('x', 1005)
-			.attr('y', 205)
-			.attr('fill', 'red');
 
 		/* ---------- Highlight neighboring nodes ------------------ */
 		// Mouse over to highlight the connected nodes 
@@ -278,9 +245,10 @@ d3.queue()
 
 			});
 
+		
 		/* ------------ Create Search Autocomplete ----------------- */
 
-		//Create list of autocomplet
+		//Create list of autocomplete
 		for (var i = 0; i < nodes.length - 1; i++) {
 			if (nodes[i].group == "Clothing") {
 				autocomplete_array.push(nodes[i].id);
@@ -308,6 +276,7 @@ d3.queue()
 			function extractLast(term) {
 				return term.split(/,\s*/).pop();
 			}
+			
 			//Create dropdown autocomplete and allow for multiple searches
 			$("#search")
 				.on("keydown", function(event) {
@@ -390,6 +359,7 @@ d3.queue()
 			link.style('opacity', 0.5)
 				.attr("stroke-width", d => link_scale(Math.abs(d.value)));
 		}
+		
 		/* ------------ Update view based on Time -------------------- */
 
 		//Update view as slider changes
@@ -420,6 +390,7 @@ d3.queue()
 			var updated = new Date(startdate.setMonth(startdate.getMonth() + nRadius));
 			nodes.forEach(function(d) {
 				d.value = eval("d.value" + nRadius);
+				d.active = eval("d.active" + nRadius)
 			});
 			//Set format of the date
 			d3.select("#nRadius-value").text(formatDate(updated))
@@ -489,22 +460,6 @@ d3.queue()
 						return "0px";
 					}
 				});
-			var event_array = [];
-			//Update event image url
-			// event_image.attr('src', function(d) {
-			// 	if (d.group == "Event" && eval("d.active" + nRadius) == 1) {
-			// 		event_array.push(d.id);
-			// 		return d.url;
-			// 	}
-			// });
-			// d3.select("#event_img")
-			// 	.selectAll("image")
-			// 	.data(event_array)
-			// 	.enter()
-			// 	.append("a", function(d) {
-			// 		console.log(d.url);
-			// 		return d.url;
-			// 	})
 
 			// Create timer functions 
 			d3.select("#start").on("click", function() {
@@ -592,7 +547,7 @@ d3.queue()
 		var width = 1140,
 			height = 20,
 			padding = 10;
-		margin = 140;
+			margin = 140;
 
 		// Create svg for time range scales 
 		var svg = d3.select('div.tick').append('svg')
@@ -602,6 +557,7 @@ d3.queue()
 		var mindate = new Date(2012, 0, 1),
 			maxdate = new Date(2015, 10, 31);
 
+		// Scale for the time range 
 		var scale = d3.scaleTime()
 			.domain([mindate, maxdate])
 			.range([10, width]);
