@@ -512,8 +512,8 @@ d3.queue()
 					return d.y;
 				});
 			svg_network.selectAll('image').attr("transform", function(d) {
-				var x = d.x - 10;
-				var y = d.y - 10;
+				var x = d.x - 15;
+				var y = d.y - 30;
 				return "translate(" + x + "," + y + ")";
 			});
 
