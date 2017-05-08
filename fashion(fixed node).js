@@ -185,19 +185,41 @@ d3.queue()
 			.on("start", dragstarted)
 			.on("drag", dragged)
 			.on("end", dragended));
-		//Create images for events
-		var event_image = d3.select('#event_img')
-			.selectAll('img')
-			.data(nodes)
-			.enter()
-			.append('img')
-			.attr('width', '150px')
-			.attr('height', '100px')
-			.attr('src', function(d) {
-				if (d.group == "Event" && eval("d.active" + 0) == 1) {
-					return d.url;
-				}
-			});
+		// //Create images for events
+		// var event_image = d3.select('#event_img')
+		// 	.selectAll('img')
+		// 	.data(nodes)
+		// 	.enter()
+		// 	.append('img')
+		// 	.attr('width', '150px')
+		// 	.attr('height', '100px')
+		// 	.attr('src', function(d) {
+		// 		if (d.group == "Event" && eval("d.active" + 0) == 1) {
+		// 			return d.url;
+		// 		}
+		// 	});
+		// 	
+		var width_legend = 300;
+		var height_legend = 400;
+		var svg_legend = d3.select("div.event_img")
+			.append("svg")
+			.attr("width", width_legend)
+			.attr("height", height_legend);
+		var legend = svg_legend
+			.selectAll('rect')
+			.attr('class', 'legend')
+			.append('rect')
+			.attr('x', 150)
+			.attr('y', 200)
+			.attr('height', 100)
+			.attr('fill', 'red');
+
+		legend
+			.append('circle')
+			.attr('r', 5)
+			.attr('x', 1005)
+			.attr('y', 205)
+			.attr('fill', 'red');
 
 		/* ---------- Highlight neighboring nodes ------------------ */
 		// Mouse over to highlight the connected nodes 
@@ -454,14 +476,15 @@ d3.queue()
 					return d.url;
 				}
 			});
-			d3.select("#event_img")
-				.selectAll("image")
-				.data(event_array)
-				.enter()
-				.append("a", function(d) {
-					console.log(d.url);
-					return d.url;
-				})
+			// d3.select("#event_img")
+			// 	.selectAll("image")
+			// 	.data(event_array)
+			// 	.enter()
+			// 	.append("a", function(d) {
+			// 		console.log(d.url);
+			// 		return d.url;
+			// 	})
+
 				// Create timer functions 
 			d3.select("#start").on("click", function() {
 				clearInterval(myTimer);
