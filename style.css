@@ -119,6 +119,10 @@ footer {
   outline: none;
 }
 
+.button:active {
+  background: lightgray;
+}
+
 .network {
   border-style:ridge;
   border-color: lightgray;

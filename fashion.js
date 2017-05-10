@@ -1,4 +1,4 @@
-//Creating svg element 
+//Creating svg element
 var svg_width = 900;
 var svg_height = 900;
 //Creating svg for the network
@@ -27,8 +27,8 @@ function changeSpeed() {
 }
 //Loading data and create visualization
 d3.queue()
-	.defer(d3.csv, "data-processing/node_list.csv") 
-	.defer(d3.csv, "data-processing/edge_list.csv") 
+	.defer(d3.csv, "data-processing/node_list.csv")
+	.defer(d3.csv, "data-processing/edge_list.csv")
 	.defer(d3.csv, "data-processing/node_url.csv") // list containing url to a picture 
 	.await(function(error, node_list, edge_list, node_url) {
 		// Create nodes of categories and events 
@@ -60,10 +60,16 @@ d3.queue()
 			obj = {
 				source: edge.Category,
 				target: edge.Event,
-				value: edge.value0
+				value: edge.value0,
+				active: edge.active0
 			};
+			// Create value for edges for each object
 			for (i = 0; i < 48; i++) {
 				obj["value" + i] = eval("edge.value" + i);
+			}
+			//Create value indicating whether the event is active within 2 months
+			for (i = 0; i < 48; i++) {
+				obj["active" + i] = eval("edge.active" + i);
 			}
 			edges.push(obj);
 		}
@@ -77,7 +83,6 @@ d3.queue()
 						nodes[i].url_event = url.url_event;
 					}
 				}
-
 			}
 		}
 
@@ -91,7 +96,7 @@ d3.queue()
 		});
 		edges = edges.filter(d => d.sum >= 0.5);
 
-		
+
 		/* ------------- Create different scales  ---------------------- */
 		// Create scale for node radius
 		var radius_scale = d3.scaleLinear()
@@ -120,7 +125,7 @@ d3.queue()
 			}
 		});
 
-		
+
 		/* ------------- Create SVG element in the network container */
 		// Create link grouop
 		linkG = svg_network.append("g")
@@ -205,54 +210,55 @@ d3.queue()
 			.offset([-8, 0]);
 
 		node.call(tool_tip);
+		//Create highlight when the user hover around the node
 		node.on('mouseover', function(d) {
-				tool_tip.html(d.id).show();
-				if (selectedNodes.length == 0) {
-					searchNode([d.id]);
-				} else {
-					if (selectedNodes.indexOf(d.id) == -1) {
-						node.filter(function(n) {
-								return n.id == d.id;
-							})
-							.attr('r', radius_scale(d.value) * 1.5)
-							.style('opacity', 1);
-
-						link.filter(function(l) {
-								return l.source.id == d.id;
-							})
-							.style('opacity', 1);
-					}
-				}
-			})
-
-
-			.on('mouseout', function(d) {
-				tool_tip.hide();
-				if (selectedNodes.length == 0) {
-					reset();
-				} else {
+			tool_tip.html(d.id).show();
+			if (selectedNodes.length == 0) {
+				searchNode([d.id]);
+			} else {
+				var connected = connectedNodes([d.id]);
+				if (selectedNodes.indexOf(d.id) == -1) {
 					node.filter(function(n) {
-							return selectedNodes.indexOf(n.id) == -1;
+							return n.id == d.id || connected.indexOf(n.id) != -1;
 						})
-						.attr('r', d => radius_scale(d.value))
-						.style('opacity', 0.2);
+						.attr('r', radius_scale(d.value) * 1.5)
+						.style('opacity', 1);
 
 					link.filter(function(l) {
-							return selectedNodes.indexOf(l.source.id) == -1;
+							return l.source.id == d.id;
 						})
-						.style('opacity', 0.1);
+						.style('opacity', 1);
 				}
+			}
+		})
+		//Reset the visualization when the user mouse out
+		.on('mouseout', function(d) {
+			tool_tip.hide();
+			if (selectedNodes.length == 0) {
+				reset();
+			} else {
+				node.filter(function(n) {
+						return selectedNodes.indexOf(n.id) == -1 &&
+							connectedNodes(selectedNodes).indexOf(n.id) == -1;
+					})
+					.attr('r', d => radius_scale(d.value))
+					.style('opacity', 0.2);
 
-			});
+				link.filter(function(l) {
+						return selectedNodes.indexOf(l.source.id) == -1 &&
+							selectedNodes.indexOf(l.target.id) == -1;
+					})
+					.style('opacity', 0.1);
+			}
 
-		
+		});
+
+
 		/* ------------ Create Search Autocomplete ----------------- */
 
 		//Create list of autocomplete
-		for (var i = 0; i < nodes.length - 1; i++) {
-			if (nodes[i].group == "Clothing") {
-				autocomplete_array.push(nodes[i].id);
-			}
+		for (var i = 0; i < nodes.length; i++) {
+			autocomplete_array.push(nodes[i].id);
 		}
 		autocomplete_array = autocomplete_array.sort();
 
@@ -276,7 +282,7 @@ d3.queue()
 			function extractLast(term) {
 				return term.split(/,\s*/).pop();
 			}
-			
+
 			//Create dropdown autocomplete and allow for multiple searches
 			$("#search")
 				.on("keydown", function(event) {
@@ -314,13 +320,9 @@ d3.queue()
 		//Set response to the search button
 		var selectedNodes = [];
 		d3.select("#autocomplete").on("click", function() {
-
 			//find the array of nodes in the search box
 			var selectedVal = document.getElementById('search').value;
-			if (selectedVal == "none") {
-				// node.attr("stroke", "white")
-				// .attr("stroke-width", "1");
-			} else {
+			if (selectedVal != "none") {
 				//Create an array to hold different search items
 				selectedNodes = selectedVal.split(/,\s*/);
 				selectedNodes = selectedNodes.slice(0, -1); // skip the last string
@@ -334,30 +336,48 @@ d3.queue()
 			reset();
 		})
 
+		//Finding the nodes that are connected to nodes in the given array
+		function connectedNodes(nodeIDArray) {
+			var connected = [];
+			edges.forEach(function(d) {
+				if (nodeIDArray.indexOf(d.target.id) != -1 && Math.abs(d.value) >= 0.7) {
+					connected.push(d.source.id);
+				}
+			})
+			return connected;
+		}
+		//Search position of the nodes in the array and highlight them
 		function searchNode(nodeIdArray) {
+			var connected = connectedNodes(nodeIdArray);
 			// Updating node opacity and radius
 			node
 				.attr('r', function(d) {
-					return nodeIdArray.indexOf(d.id) != -1 ? radius_scale(d.value) * 1.5 : radius_scale(d.value);
+
+					return nodeIdArray.indexOf(d.id) != -1 || connected.indexOf(d.id) != -1 ?
+						radius_scale(d.value) * 1.5 : radius_scale(d.value);
 				})
 				.style("opacity", function(d) {
-					return nodeIdArray.indexOf(d.id) != -1 ? 1 : 0.2;
+					return nodeIdArray.indexOf(d.id) != -1 || connected.indexOf(d.id) != -1 ? 1 : 0.2;
 				});
 
 			// Updating connected link
-
 			link
 				.style("opacity", function(d) {
-					return nodeIdArray.indexOf(d.source.id) != -1 ? 1 : 0.1;
-				});
-			}
+					if (nodeIdArray.indexOf(d.target.id) != -1 || nodeIdArray.indexOf(d.source.id) != -1) {
+						return 1;
+					} else {
+						return 0.1;
+					}
+				})
+		}
 
+		//Reset visualization to normal stage
 		function reset() {
 			node.attr('r', d => radius_scale(d.value))
 				.style('opacity', 0.8);
 			link.style('opacity', 0.5);
 		}
-		
+
 		/* ------------ Update view based on Time -------------------- */
 
 		//Update view as slider changes
@@ -386,7 +406,13 @@ d3.queue()
 			//Set initial and updated point as the slider moves
 			var startdate = new Date(2012, 0, 1);
 			var updated = new Date(startdate.setMonth(startdate.getMonth() + nRadius));
+			//Set value for nodes and edges
 			nodes.forEach(function(d) {
+				d.value = eval("d.value" + nRadius);
+				d.active = eval("d.active" + nRadius)
+			});
+
+			edges.forEach(function(d) {
 				d.value = eval("d.value" + nRadius);
 				d.active = eval("d.active" + nRadius)
 			});
@@ -416,6 +442,10 @@ d3.queue()
 					}
 				});
 
+			if (selectedNodes.length != 0) {
+				searchNode(selectedNodes);
+			}
+
 
 			//Update links
 			link = link.attr('stroke-width', function(d) {
@@ -428,9 +458,9 @@ d3.queue()
 				})
 				.attr("stroke", function(d) {
 					if (eval("d.value" + nRadius) < 0) {
-						return "#003399";
-					} else {
 						return "#801515";
+					} else {
+						return "#003399";
 					}
 				})
 				.merge(link);
@@ -458,7 +488,7 @@ d3.queue()
 					}
 				});
 
-			// Create timer functions 
+			// Create timer functions for play, pause and stop button
 			d3.select("#start").on("click", function() {
 				clearInterval(myTimer);
 				if (speed == 0) {
@@ -491,11 +521,12 @@ d3.queue()
 					.style("text-align", "center");
 				d3.select("#nRadius").property("value", 0);
 				clearInterval(myTimer);
+				updateView(0);
 			});
 
 		}; // end updateView
 
-
+		//Set positions for images, nodes and edges in the network
 		function ticked() {
 			svg_network.selectAll('path.link')
 				.attr("d", function(d) {
@@ -540,8 +571,7 @@ d3.queue()
 		};
 
 		var width = 1140,
-			height = 20,
-			padding = 10;
+			height = 20;
 
 		// Create svg for time range scales 
 		var svg = d3.select('div.tick').append('svg')
@@ -568,7 +598,6 @@ d3.queue()
 		var svg2 = d3.select('div.tick').append('svg')
 			.attr('width', width)
 			.attr('height', height);
-
 		svg2.selectAll('text')
 			.data(year)
 			.enter()
